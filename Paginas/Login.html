@@ -16,29 +16,52 @@
   </head>
 
   <!-- CABEÇALHO -->
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 px-3 mb-0" style="background-color: #F0A732;">
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 px-3" style="background-color: #F0A732;">
     <!-- BOTÃO PRINCIPAL -->
-    <h4 class="d-flex align-items-center justify-content-center col-md-2 mr-0 p-0 text-dark text-decoration-none">
-      <a href="../Paginas/Principal.html" class="text-dark text-decoration-none">
-        Principal
-      </a>
+    <h4 class="d-flex align-items-center col-md-3 mb-md-0 text-dark text-decoration-none">
+        <a href="../Paginas/Principal.html" class="text-dark text-decoration-none">
+            Principal
+        </a>
     </h4>
 
     <!-- LOGO -->
-    <a href="/" class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0" style="text-decoration: none; color: black;">
-      <h3>SHOWCASE</h3>
-    </a>
+    <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <a href="/" style="text-decoration: none; color: black;">
+            <h3 class="mb-0 text-dark">SHOWCASE</h3>
+        </a>
+    </div>
 
     <!-- BOTÕES DE LOGIN -->
     <div class="col-md-3 text-end">
-      <button type="button" class="btn btn-outline-dark me-2">Login</button>
-      <button type="button" class="btn btn-dark">Sign-up</button>
+        <a href="/Paginas/Login.html" class="btn btn-outline-dark me-2">Entrar</a>
+        <a href="/Paginas/Cadastro.html" class="btn btn-dark">Cadastre-se</a>
     </div>
   </header>
 
   <!-- CORPO -->
   <body class="my-0 py-0 bg-dark">
-        
+    <div class="d-flex align-items-center justify-content-center vh-100">
+      <div class="bg-white p-5" style="border-style: solid; border-width: 3px; border-color: #F0A732; border-radius: 15px;">
+        <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+            </div>
+            <div class="form-group mt-2">
+              <label for="exampleInputPassword1">Senha</label>
+              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha">
+            </div>
+            <div class="form-check mt-2">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">Lembrar-me</label>
+            </div>
+            <div class="row mb-3 d-flex justify-content-evenly mx-auto">
+                <button type="submit" class="btn btn-sm col-md-4 mt-4 text-dark" style="background-color: #F0782D;">Entrar</button>
+                <a href="/Paginas/Cadastro.html" class="btn btn-dark btn-sm col-md-7 mt-4">Cadastre-se</a>
+            </div>          
+        </form>
+      </div>
+    </div>
   </body>
 
   <!-- FOTTER -->
