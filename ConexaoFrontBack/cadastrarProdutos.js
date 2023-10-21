@@ -6,16 +6,30 @@ document.getElementById('formularioProduto').addEventListener('submit', function
 
     const postData = {
         name: produto,
-        value: valor
+        value: parseFloat(valor)
     };
 
-    // Realizar a requisição POST
-    axios.post('https://localhost:7058/api/v1/Product', postData)
-        .then(response => {
-            console.log('Sucesso:', response.data);
-        })
-        .catch(error => {
-            console.error('Erro na requisição:', error.message);
-        });
+    let data = JSON.stringify({
+        "name": postData.name,
+        "value": postData.value
+    });
 
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://localhost:7058/api/v1/Product',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': ''
+        },
+        data: data
+    };
+
+    axios.request(config)
+        .then((response) => {
+            console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 });
