@@ -27,7 +27,7 @@ document.getElementById('formularioProduto').addEventListener('submit', function
 
     axios.request(config)
         .then((response) => {
-            console.log(JSON.stringify(response.data));
+            window.location.href = '../../Paginas/Produtos.html';
         })
         .catch((error) => {
             console.log(error);

@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
             produtos.forEach(function (produto) {
                 const li = document.createElement("li");
                 li.innerHTML = `<p class="dropdown-item">${produto.name}</p>`;
-                console.log(produto.name, produto.value)
                 produtosLista.appendChild(li);
             });
         })
