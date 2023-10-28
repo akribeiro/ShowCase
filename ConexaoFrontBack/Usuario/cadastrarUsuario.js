@@ -1,51 +1,93 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Seletor para o formulário de cadastro
-    const cadastroForm = document.querySelector("form");
+document.getElementById('formularioCadastro').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-    cadastroForm.addEventListener("submit", function (event) {
-        event.preventDefault();
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+    const confirmarEmail = document.getElementById("confirmarEmail").value;
+    const confirmarSenha = document.getElementById("confirmarSenha").value;
 
-        // Obtenha os valores dos campos do formulário
-        const nome = document.getElementById("nome").value;
-        const email = document.getElementById("email").value;
-        const senha = document.getElementById("senha").value;
-        const confirmarEmail = document.getElementById("confirmarEmail").value;
-        const confirmarSenha = document.getElementById("confirmarSenha").value;
-        console.log("OK");
+    if (email !== confirmarEmail) {
+        // Os valores são diferentes, exiba uma mensagem de erro
+        const mensagemErro = document.getElementById("mensagemErro");
+        mensagemErro.style.display = "Block";
+        return; // Impede o envio do formulário
+    } else if (senha !== confirmarSenha) {
+        // Os valores são diferentes, exiba uma mensagem de erro
+        const mensagemErro = document.getElementById("mensagemErroSenha");
+        mensagemErro.style.display = "Block";
+        return; // Impede o envio do formulário
+    } else {
+        // Crie um objeto com os dados do usuário
+        const userData = {
+            name: nome,
+            email: email,
+            password: senha
+        };
 
-        if (email !== confirmarEmail) {
-            // Os valores são diferentes, exiba uma mensagem de erro
-            const mensagemErro = document.getElementById("mensagemErro");
-            mensagemErro.style.display = "Block";
-            return; // Impede o envio do formulário
-        }
-        else if(senha !== confirmarSenha){
-            // Os valores são diferentes, exiba uma mensagem de erro
-            const mensagemErro = document.getElementById("mensagemErroSenha");
-            mensagemErro.style.display = "Block";
-            return; // Impede o envio do formulário
-        }
-        else{
-            // Crie um objeto com os dados do usuário
-            const userData = {
-                name: nome,
-                email: email,
-                password: senha
-            };
+        let data = JSON.stringify({
+            "name": userData.name,
+            "email": userData.email,
+            "password": userData.password
+        });
 
-            // Faça uma requisição POST para a API de cadastro
-            axios.post("https://localhost:7058/api/v1/Auth/Register", userData)
-                .then(function (response) {
-                    // Trate a resposta, redirecione ou exiba uma mensagem de sucesso
-                    console.log("Cadastro realizado com sucesso!");
-                    // Redirecionar o usuário para a página desejada, por exemplo:
-                    // window.location.href = "sucesso.html";
-                })
-                .catch(function (error) {
-                    // Trate os erros, por exemplo, exibindo uma mensagem de erro
-                    consol
-                    e.error("Erro ao cadastrar: " + error.message);
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://localhost:7058/api/v1/Auth/Register',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': ''
+            },
+            data: data
+        };
+
+        axios.request(config)
+        .then((response) => {
+            if (response.status === 200 && response.data.statusCode === 200) {
+
+                // Crie um objeto com os dados do usuário
+                const storeData = {
+                    name: nome,
+                    storeLogo: null,
+                    userId: response.data.data.id
+                };
+
+                let dataStore = JSON.stringify({
+                    "name": storeData.name,
+                    "storeLogo": storeData.storeLogo,
+                    "userId": storeData.userId
                 });
-        }
-    });
+
+                let configStore = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: 'https://localhost:7058/api/v1/Store',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': ''
+                    },
+                    data: dataStore
+                };
+
+                axios.request(configStore)
+                .then((response) => {
+                    if (response.status === 200 && response.data.statusCode === 200){
+                        window.location.href = '../../Paginas/Login.html';
+                    }
+                    else{
+                        // Exiba uma mensagem de erro ou trate de outra forma
+                        console.log("Erro no registro: " + response.data);
+                    }
+                })
+
+            } else {
+                // Exiba uma mensagem de erro ou trate de outra forma
+                console.log("Erro no registro: " + response.data);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 });

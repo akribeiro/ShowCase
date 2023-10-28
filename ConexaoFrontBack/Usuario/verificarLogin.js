@@ -1,29 +1,41 @@
-// Função para verificar o login do usuário
-function verificarLogin() {
+document.getElementById('formularioLogin').addEventListener('submit', function (event) {
+    event.preventDefault();
+
     const email = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
-
-    // Fazer uma solicitação para verificar o login no Swagger
-    // Substitua a URL pelo endpoint real do seu serviço Swagger
-    axios.post("https://localhost:7058/api/v1/Auth/Login", {
+        // Crie um objeto com os dados do usuário
+    const userData = {
         email: email,
         password: senha
-    })
-    .then(function (response) {
-        console.log("LOGADO");
-        // Login bem-sucedido, redirecione o usuário para a página principal
-        window.location.href = "../../Paginas/PaginaPrincipalUsuario.html";
-    })
-    .catch(function (error) {
-        console.log("OK");
-        const mensagemErro = document.getElementById("mensagemErro");
-            mensagemErro.style.display = "Block";
-            return; // Impede o envio do formulário
-    });
-}
+    };
 
-const formularioLogin = document.querySelector('form');
-formularioLogin.addEventListener('submit', function (event) {
-    event.preventDefault(); // Evite o comportamento padrão de recarregar a página
-    verificarLogin();
+    let data = JSON.stringify({
+        "email": userData.email,
+        "password": userData.password
+    });
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://localhost:7058/api/v1/Auth/Login',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': ''
+        },
+        data: data
+    };
+
+    axios.request(config)
+    .then((response) => {
+        if (response.status === 200 && response.data.statusCode === 200) {
+            // Registro bem-sucedido, redirecione para a próxima página
+            window.location.href = '../../Paginas/PaginaPrincipalUsuario.html';
+        } else {
+            // Exiba uma mensagem de erro ou trate de outra forma
+            console.log("Erro no registro: " + response.data);
+        }
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 });
