@@ -1,74 +1,113 @@
+document.getElementById("cadastrarProduto").addEventListener("click", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("id");
+    // Verifica se há um userId válido
+    if (userId) {
+        const nextPage = `../../Paginas/CadastroDeProdutos.html?id=${userId}`;
+        window.location.href = nextPage;
+    } else {
+        console.log("UserId não encontrado na URL.");
+    }
+});
+
 document.addEventListener("DOMContentLoaded", function () {
-    // Fazer uma solicitação ao banco de dados para obter a lista de produtos
-    axios.get("https://localhost:7058/api/v1/Product/GetAll")
-        .then(function (response) {
-            const produtos = response.data; // Lista de Produtos
+    // Pegar userId da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("id");
 
-            const tabelaProdutos = document.getElementById("tabelaDeProdutos"); // Seleciona o corpo da tabela
+    if (userId) {
+        const apiUrl = `https://localhost:7058/api/v1/Store/GetById/${userId}`;
+        let searchUrl = ""; // Declare a variável aqui
 
-            // Iterar sobre os produtos e criar linhas na tabela para cada um
-            produtos.forEach(function (produto, index) {
-                const newRow = tabelaProdutos.insertRow();
-                newRow.className = "align-middle";
+        // Fazer uma solicitação à API para obter o storeId
+        axios.get(apiUrl)
+            .then((response) => {
+                if (response.status === 200 && response.data.statusCode === 200) {
+                    // PEGAR AQUI O storeId para criar uma nova vitrine
+                    const storeId = response.data.data.storeId;
+                    searchUrl = `https://localhost:7058/api/v1/StoreProduct/GetAllProductsByStoreId/${storeId}`;
 
-                const cellNumero = newRow.insertCell(0);
-                cellNumero.textContent = index + 1;
+                    // Fazer uma solicitação ao banco de dados para obter a lista de produtos
+                    axios.get(searchUrl)
+                        .then(function (response) {
+                            const produtos = response.data; // Lista de Produtos
 
-                const cellNome = newRow.insertCell(1);
-                cellNome.textContent = produto.name;
+                            const tabelaProdutos = document.getElementById("tabelaDeProdutos"); // Seleciona o corpo da tabela
 
-                const cellValor = newRow.insertCell(2);
+                            // Iterar sobre os produtos e criar linhas na tabela para cada um
+                            produtos.forEach(function (produto, index) {
+                                const newRow = tabelaProdutos.insertRow();
+                                newRow.className = "align-middle";
 
-                // Crie a estrutura dentro da célula de Valor
-                const valorContainer = document.createElement("div");
-                valorContainer.className = "d-flex align-items-center justify-content-between";
+                                const cellNumero = newRow.insertCell(0);
+                                cellNumero.textContent = index + 1;
 
-                const valorTexto = document.createElement("div");
-                valorTexto.textContent = `Valor: R$${produto.value.toFixed(2)}`;
-                valorContainer.appendChild(valorTexto);
+                                const cellNome = newRow.insertCell(1);
+                                cellNome.textContent = produto.name;
 
-                const botoesContainer = document.createElement("div");
+                                const cellValor = newRow.insertCell(2);
 
-                const editarLink = document.createElement("a");
-                editarLink.href = "#";
-                editarLink.style.textDecoration = "none";
-                const editarBtn = document.createElement("button");
-                editarBtn.className = "btn btn-secondary";
-                editarBtn.style.color = "black";
-                editarBtn.type = "button";
-                editarBtn.innerHTML = '<i class="bi bi-pencil"></i>';
-                editarLink.appendChild(editarBtn);
-                botoesContainer.appendChild(editarLink);
-                editarBtn.style.marginRight = "5px";
+                                // Crie a estrutura dentro da célula de Valor
+                                const valorContainer = document.createElement("div");
+                                valorContainer.className = "d-flex align-items-center justify-content-between";
 
-                const excluirLink = document.createElement("a");
-                excluirLink.href = "#";
-                excluirLink.style.textDecoration = "none";
-                const excluirBtn = document.createElement("button");
-                excluirBtn.className = "btn btn-danger";
-                excluirBtn.style.color = "black";
-                excluirBtn.type = "button";
-                excluirBtn.innerHTML = '<i class="bi bi-trash"></i>';
-                excluirLink.appendChild(excluirBtn);
-                botoesContainer.appendChild(excluirLink);
+                                const valorTexto = document.createElement("div");
+                                valorTexto.textContent = `Valor: R$${produto.value.toFixed(2)}`;
+                                valorContainer.appendChild(valorTexto);
 
-                valorContainer.appendChild(botoesContainer);
+                                const botoesContainer = document.createElement("div");
 
-                cellValor.appendChild(valorContainer);
+                                const editarLink = document.createElement("a");
+                                editarLink.href = "#";
+                                editarLink.style.textDecoration = "none";
+                                const editarBtn = document.createElement("button");
+                                editarBtn.className = "btn btn-secondary";
+                                editarBtn.style.color = "black";
+                                editarBtn.type = "button";
+                                editarBtn.innerHTML = '<i class="bi bi-pencil"></i>';
+                                editarLink.appendChild(editarBtn);
+                                botoesContainer.appendChild(editarLink);
+                                editarBtn.style.marginRight = "5px";
 
-                // Atribuir um ID exclusivo à linha com base no ID do produto
-                newRow.id = `produto_${produto.id}`;
+                                const excluirLink = document.createElement("a");
+                                excluirLink.href = "#";
+                                excluirLink.style.textDecoration = "none";
+                                const excluirBtn = document.createElement("button");
+                                excluirBtn.className = "btn btn-danger";
+                                excluirBtn.style.color = "black";
+                                excluirBtn.type = "button";
+                                excluirBtn.innerHTML = '<i class="bi bi-trash"></i>';
+                                excluirLink.appendChild(excluirBtn);
+                                botoesContainer.appendChild(excluirLink);
 
-                // Adicionar um evento de clique ao botão de exclusão
-                excluirBtn.addEventListener("click", function () {
-                    // Chamar a função para excluir o produto e passar o ID do produto
-                    excluirProduto(produto.id);
-                });
+                                valorContainer.appendChild(botoesContainer);
+
+                                cellValor.appendChild(valorContainer);
+
+                                // Atribuir um ID exclusivo à linha com base no ID do produto
+                                newRow.id = `produto_${produto.id}`;
+
+                                // Adicionar um evento de clique ao botão de exclusão
+                                excluirBtn.addEventListener("click", function () {
+                                    // Chamar a função para excluir o produto e passar o ID do produto
+                                    excluirProduto(produto.id);
+                                });
+                            });
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                } else {
+                    // Trate erros ou exiba mensagens de erro
+                    console.log("Erro para pegar storeId:", response.data);
+                }
+            })
+            .catch(function (error) {
+                console.log("Erro na solicitação:", error);
             });
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    } else {
+        console.log("UserId não encontrado na URL.");
+    }
 });
 
 // Função para excluir um produto com base no ID

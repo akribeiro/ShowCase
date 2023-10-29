@@ -29,7 +29,9 @@ document.getElementById('formularioLogin').addEventListener('submit', function (
     .then((response) => {
         if (response.status === 200 && response.data.statusCode === 200) {
             // Registro bem-sucedido, redirecione para a próxima página
-            window.location.href = '../../Paginas/PaginaPrincipalUsuario.html';
+            const userId = response.data.data.id;
+            const nextPage = `../../Paginas/PaginaPrincipalUsuario.html?id=${userId}`;
+            window.location.href = nextPage;
         } else {
             // Exiba uma mensagem de erro ou trate de outra forma
             console.log("Erro no registro: " + response.data);

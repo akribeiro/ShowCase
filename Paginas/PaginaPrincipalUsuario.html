@@ -20,6 +20,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+    <!-- Adicione esta tag de script para carregar o Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="../ConexaoFrontBack/Vitrines/criarVitrine.js"></script>
 </head>
 
 <!-- CABEÇALHO -->
@@ -63,26 +66,32 @@
     </div>
 
     <div class="d-flex justify-content-center text-white my-2">
-        <a href="../Paginas/Produtos.html" type="button" class="btn text-white" style="background-color: #F0782D; font-size: 20px;">Produtos</a>
+        <a type="button" id="criarProduto" class="btn text-white" style="background-color: #F0782D; font-size: 20px;">Produtos</a>
     </div>
 
     <h2 class="ms-4 mt-3">Suas Vitrines</h2>
 
     <div class="ms-4 me-4 ">
         <div class="row">
-            <div class="col-md-2">
-                <div class="card mb-4">
+            <div class="col-md-2 d-flex flex-column">
+                <div class="card mb-4 flex-grow-1 d-flex flex-column">
                     <div class="card-img-top bg-dark" style="height: 225px; width: 100%; display: flex; justify-content: center; align-items: center;">
-                        <a href="../Paginas/CriacaoDaVitrine.html" style="text-decoration: none; color: black;"><i class="bi bi-plus" style="font-size:xx-large; background-color: #F0A732; border-radius: 50%; padding: 20px;"></i></a>
+                        <a href="javascript:void(0);" id="addVitrine" style="text-decoration: none; color: black;">
+                            <i class="bi bi-plus" style="font-size: xx-large; background-color: #F0A732; border-radius: 50%; padding: 20px;"></i>
+                        </a>
                     </div>
-                    <div class="card-body p-1">
-                        <div class="d-flex justify-content-around align-items-center">
-                            <i class="bi bi-pencil-square bi-2x" style="font-size: x-large;"></i>
-                            <i class="bi bi-trash3" style="font-size: x-large;"></i>
-                        </div>
+                    <div class="card-body p-1 d-flex flex-column justify-content-between">
+                        <input type="text" id="nomeVitrine" placeholder="Nome da vitrine" class="form-control mb-1" style="display: none;">
+                        <label id="opcao1" for="opcao1" style="display: none;">
+                            <input type="radio" id="opcao1" name="opcao" value="Vertical" checked> Vertical
+                        </label>
+                        <label id="opcao2" for="opcao2" style="display: none;">
+                            <input type="radio" id="opcao2" name="opcao" value="Horizontal"> Horizontal
+                        </label>
+                        <button id="criarVitrine" class="btn text-white" style="display: none; background-color: #F0782D;">Nova vitrine</button>
                     </div>
                 </div>
-            </div>            
+            </div>
             <div class="col-md-2">
                 <div class="card mb-4">
                     <img class="card-img-top" alt="" style="height: 225px; width: 100%; display: block;" src=""
@@ -158,7 +167,6 @@
         </div>
     </div>
 </body>
-
 <!-- FOTTER -->
 
 </html>
