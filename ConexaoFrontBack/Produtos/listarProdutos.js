@@ -16,21 +16,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const userId = urlParams.get("id");
 
     if (userId) {
-        const apiUrl = `https://localhost:7058/api/v1/Store/GetById/${userId}`;
+        const apiUrl = `https://localhost:7058/api/v1/Store/GetAllStoresByUserId/${userId}`;
         let searchUrl = ""; // Declare a variável aqui
 
         // Fazer uma solicitação à API para obter o storeId
-        axios.get(apiUrl)
+        axios.request(apiUrl)
             .then((response) => {
                 if (response.status === 200 && response.data.statusCode === 200) {
-                    // PEGAR AQUI O storeId para criar uma nova vitrine
-                    const storeId = response.data.data.storeId;
+                    const storeId = response.data.data[0].id;
                     searchUrl = `https://localhost:7058/api/v1/StoreProduct/GetAllProductsByStoreId/${storeId}`;
 
                     // Fazer uma solicitação ao banco de dados para obter a lista de produtos
                     axios.get(searchUrl)
                         .then(function (response) {
-                            const produtos = response.data; // Lista de Produtos
+                            console.log(response);
+                            const produtos = response.data.data; // Lista de Produtos
 
                             const tabelaProdutos = document.getElementById("tabelaDeProdutos"); // Seleciona o corpo da tabela
 
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Função para excluir um produto com base no ID
 function excluirProduto(id) {
     // Fazer uma solicitação para excluir o produto com o ID fornecido
-    axios.delete(`https://localhost:7058/api/v1/Product/${id}`)
+    axios.delete(`/api/v1/StoreProduct/DeleteProduct/${id}`)
         .then(function (response) {
             // Remover a linha da tabela após a exclusão bem-sucedida
             const linhaProduto = document.getElementById(`produto_${id}`);
@@ -121,7 +121,5 @@ function excluirProduto(id) {
         })
         .catch(function (error) {
             console.log(error);
-            const linhaProduto = document.getElementById(`produto_${id}`);
-            linhaProduto.remove();
         });
 }

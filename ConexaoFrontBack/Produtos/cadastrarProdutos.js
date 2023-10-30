@@ -6,13 +6,14 @@ document.getElementById('formularioProduto').addEventListener('submit', function
 
     // Verifica se há um userId válido
     if (userId) {
-        const apiUrl = `https://localhost:7058/api/v1/Store/GetById/${userId}`;
+        const apiUrl = `https://localhost:7058/api/v1/Store/GetAllStoresByUserId/${userId}`;
         // Fazer uma solicitação à API para obter o storeId
         axios.get(apiUrl)
             .then((response) => {
                 if (response.status === 200 && response.data.statusCode === 200){
                     // Pegar aqui o storeId para criar uma nova vitrine
-                    const storeId = response.data.data.storeId;
+                    const storeId = response.data.data[0].id;
+
                     const produto = document.getElementById('produto').value;
                     const valor = document.getElementById('valor').value;
                     const descricao = document.getElementById('descricao').value;
@@ -45,7 +46,8 @@ document.getElementById('formularioProduto').addEventListener('submit', function
 
                     axios.request(config)
                         .then((response) => {
-                            window.location.href = '../../Paginas/Produtos.html';
+                            const nextPage = `../../Paginas/Produtos.html?id=${userId}`;
+                            window.location.href = nextPage;
                         })
                         .catch((error) => {
                             console.log(error);

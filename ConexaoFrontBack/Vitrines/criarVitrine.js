@@ -19,6 +19,7 @@ document.getElementById("addVitrine").addEventListener("click", function () {
     document.getElementById("opcao2").style.display = "block";
 });
 
+
 document.getElementById("criarVitrine").addEventListener("click", function () {
     var nomeVitrine = document.getElementById("nomeVitrine").value;
     var opcaoSelecionada = document.querySelector('input[name="opcao"]:checked');
@@ -33,16 +34,16 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                 console.log("UserId inválido.");
             } else {
                 // Define a URL da API para obter os detalhes da loja com base no userId
-                const apiUrl = `https://localhost:7058/api/v1/Store/GetById/${userId}`;
+                const apiUrl = `https://localhost:7058/api/v1/Store/GetAllStoresByUserId/${userId}`;
 
                 // Faz a solicitação para obter os detalhes da loja
                 axios.get(apiUrl)
                     .then((response) => {
                         if (response.status === 200 && response.data.statusCode === 200) {
                             // PEGAR AQUI O storeId para criar uma nova vitrine
-                            const storeId = response.data.data.storeId;
-                            
-
+                            const storeId = response.data.data[0].id;
+                            console.log(storeId);
+                            console.log(nomeVitrine);
 
                             // Crie um objeto com os dados do usuário
                             const vitrineData = {
@@ -96,14 +97,14 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                 console.log("UserId inválido.");
             } else {
                 // Define a URL da API para obter os detalhes da loja com base no userId
-                const apiUrl = `https://localhost:7058/api/v1/Store/GetById/${userId}`;
+                const apiUrl = `https://localhost:7058/api/v1/Store/GetAllStoresByUserId/${userId}`;
 
                 // Faz a solicitação para obter os detalhes da loja
                 axios.get(apiUrl)
                     .then((response) => {
                         if (response.status === 200 && response.data.statusCode === 200) {
                             // PEGAR AQUI O storeId para criar uma nova vitrine
-                            const storeId = response.data.data.storeId;
+                            const storeId = response.data.data[0].id;
 
                             // Crie um objeto com os dados do usuário
                             const vitrineData = {

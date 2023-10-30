@@ -20,13 +20,11 @@ document.getElementById('formularioCadastro').addEventListener('submit', functio
     } else {
         // Crie um objeto com os dados do usuário
         const userData = {
-            name: nome,
             email: email,
             password: senha
         };
 
         let data = JSON.stringify({
-            "name": userData.name,
             "email": userData.email,
             "password": userData.password
         });
