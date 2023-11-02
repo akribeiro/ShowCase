@@ -83,12 +83,10 @@
                     </div>
                     <div class="card-body p-1 d-flex flex-column justify-content-between">
                         <input type="text" id="nomeVitrine" placeholder="Nome da vitrine" class="form-control mb-1" style="display: none;">
-                        <label id="opcao1" for="opcao1" style="display: none;">
-                            <input type="radio" id="opcao1" name="opcao" value="Vertical" checked> Vertical
-                        </label>
-                        <label id="opcao2" for="opcao2" style="display: none;">
-                            <input type="radio" id="opcao2" name="opcao" value="Horizontal"> Horizontal
-                        </label>
+                        <label for="opcoesSelect" id="opcoes" style="display: none;">Vitrine:</label>
+                        <select class="mb-2" id="opcoesSelect" style="display: none;">
+                            <!-- As opções de estilo serão inseridas aqui dinamicamente -->
+                        </select>
                         <button id="criarVitrine" class="btn text-white" style="display: none; background-color: #F0782D;">Nova vitrine</button>
                     </div>
                 </div>

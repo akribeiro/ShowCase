@@ -34,10 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                         const productCard = createProductCard(produto);
 
                                         // Encontre a div "m-2" na página CriacaoDaVitrine.html
-                                        const m2Div = document.querySelector('.m-2');
+                                        const Div = document.querySelector('.row.mx-auto');
 
                                         // Insira o produto na div "m-2"
-                                        m2Div.appendChild(productCard);
+                                        Div.appendChild(productCard);
                                     });
                                 });
                             })
@@ -57,28 +57,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Função para criar um elemento de produto
 function createProductCard(produto) {
-    const productCard = document.createElement("div");
-    productCard.className = "card mb-2 bg-dark";
-    productCard.style = "color: aqua; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to left, rgb(0, 81, 156), black);background-blend-mode: overlay; border-radius: 40px; border-top-right-radius: 80px; border-bottom-right-radius: 200px;";
+    const customProductCard = document.createElement("div");
+    customProductCard.className = "col-md-4 mb-2";
 
-    // Defina o conteúdo do cartão do produto com base nos dados do produto
-    productCard.innerHTML = `
-        <div class="row g-0 p-3">
-            <div class="col-md-3 p-2">
-                <img src="${produto.imageUrl}" class="card-img-top img-fluid" alt="${produto.name}">
+    customProductCard.innerHTML = `
+        <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, rgb(0, 81, 156), black);background-blend-mode: overlay; border-radius: 40px;">
+            <div class="d-flex justify-content-center">
+                <img src="${produto.imageUrl}" width="150px" class="my-2">
             </div>
-            <div class="col-md-8 pt-0 ps-3 mt-3">
-                <div class="card-body py-0">
-                    <h2 class="card-title" style="color: white;">${produto.name}</h2>
-                    <h5 class="card-text mb-3" style="color: deepskyblue;">Valor: ${produto.price} av<br>ou ${produto.price} em até 12x</h5>
-                    <h5 class="card-text" style="color: white;">Descrição: ${produto.description}</h5>
-                </div>
-                <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
-                </div>
+            <div class="d-flex flex-column">
+                <h1>${produto.name}</h1>
+                <h5>Valor: ${produto.value} av<br>ou ${produto.value} em até 12x</h5>
+                <h6>Descrição: ${produto.sku}</h6>
+            </div>
+            <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
+                <a href="#" class="btn btn-primary">Quero Este!</a>
             </div>
         </div>
     `;
 
-    return productCard;
+    return customProductCard;
 }
+
