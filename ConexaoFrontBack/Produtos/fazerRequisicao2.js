@@ -11,6 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (response.status === 200 && response.data.statusCode === 200) {
                             // PEGAR AQUI O storeId para criar uma nova vitrine
                             const storeId = response.data.data[0].id;
+                            const storeName = response.data.data[0].name;
+
+                            const lojaTronicElement = document.querySelector('.d-flex.justify-content-center.mb-0.mt-3');
+
+                            if (lojaTronicElement) {
+                                lojaTronicElement.textContent = storeName;
+                            }
 
                             const searchUrl = `https://showcase-api.azurewebsites.net/api/v1/StoreProduct/GetAllProductsByStoreId/${storeId}`;
 
@@ -18,8 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
                             axios.get(searchUrl)
                             .then(function (response) {
                                 const produtos = response.data.data; //Lista de Produtos
-                                console.log(response);
-
                                 const produtosLista = document.getElementById("produtosLista");
 
                                 //Iterar sobre os produtos e criar elementos <li> para cada um
@@ -52,13 +57,67 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.log("UserId não encontrado na URL.");
     }
+    if (userId) {
+        const apiUrl2 = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetAllTemplates`;
+    
+            // Faz a solicitação para obter os modelos das vitrines
+            axios.get(apiUrl2)
+                .then((response) => {
+                    if (response.status === 200 && response.data.statusCode === 200) {
+                        const vitrines = response.data.data; //Lista de vitrines    
+                            const modeloVitrine = document.getElementById("modelosVitrines");
+                            var contagem = 1;
+                            //Iterar sobre os vitrine e criar elementos <li> para cada um
+                            vitrines.forEach(function (vitrine) {
+                                if (contagem === 1) {
+                                    const link = document.createElement("a");
+                                    link.id = vitrine.id;
+                                    link.innerHTML = `<i class="bi bi-window-stack" style="color: #F0A732; font-size: xx-large;"></i>`;
+                                    modeloVitrine.appendChild(link);
+                                    contagem++;
+    
+                                    // Adicione um ouvinte de evento de clique a esta tag <a>
+                                    link.addEventListener("click", function (event) {
+                                        event.preventDefault(); // Impede que o link redirecione imediatamente
+                                        //ADICIONAR CÓDIGO DE EDIÇÃO DE ESTILO AQUI
+                                        const urlParams = new URLSearchParams(window.location.search);
+                                        const id = urlParams.get("id");
+                                        const novaURL = `./CriacaoDaVitrine.html?id=${id}`;
+                                        window.location.href = novaURL;
+                                    });
+                                } else if (contagem === 2) {
+                                    const link = document.createElement("a");
+                                    link.id = vitrine.id;
+                                    link.innerHTML = `<i class="bi bi-window-stack mx-3" style="color: #F0A732; font-size: xx-large;"></i>`;
+                                    modeloVitrine.appendChild(link);
+                                    contagem++;
+    
+                                    // Adicione um ouvinte de evento de clique a esta tag <a>
+                                    link.addEventListener("click", function (event) {
+                                        event.preventDefault(); // Impede que o link redirecione imediatamente
+                                        //ADICIONAR CÓDIGO DE EDIÇÃO DE ESTILO AQUI
+                                        const urlParams = new URLSearchParams(window.location.search);
+                                        const id = urlParams.get("id");
+                                        const novaURL = `./CriacaoDaVitrine2.html?id=${id}`;
+                                        window.location.href = novaURL;
+                                    });
+                                }
+                            });
+                    }
+                    else {
+                        console.log("Erro para pegar storeId:", response.data);
+                    }
+                });    
+    } else {
+        console.log("UserId não encontrado na URL.");
+    }
 });
-
 
 // Função para criar um elemento de produto
 function createProductCard(produto) {
     const customProductCard = document.createElement("div");
     customProductCard.className = "col-md-4 mb-2";
+    customProductCard.id=produto.id;
 
     customProductCard.innerHTML = `
         <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, rgb(0, 81, 156), black);background-blend-mode: overlay; border-radius: 40px;">
@@ -72,6 +131,7 @@ function createProductCard(produto) {
             </div>
             <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
                 <a href="#" class="btn btn-primary">Quero Este!</a>
+                <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
             </div>
         </div>
     `;
@@ -79,3 +139,21 @@ function createProductCard(produto) {
     return customProductCard;
 }
 
+// Adicione um ouvinte de evento para os botões de exclusão
+document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("btn-excluir")) {
+        const produtoId = event.target.getAttribute("data-produto-id");
+        excluirProduto(produtoId);
+    }
+});
+
+function excluirProduto(produtoId) {
+    console.log(`Excluir produto com ID: ${produtoId}`);
+    
+    // COLOCAR CODIGO PARA REMOVER PRODUTO DA VITRINE AQUI.
+    const produtoElement = document.getElementById(produtoId);
+    if (produtoElement) {
+        produtoElement.remove();
+    } else {
+    }
+}
