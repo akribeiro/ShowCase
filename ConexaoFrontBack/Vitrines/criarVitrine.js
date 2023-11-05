@@ -24,10 +24,6 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
     var templateId = opcaoSelecionada.value;
     var textoOpcaoSelecionada = opcaoSelecionada.options[opcoesSelect.selectedIndex].innerText;
 
-    console.log("AQUI")
-    console.log(textoOpcaoSelecionada);
-    console.log(templateId);
-
     if (nomeVitrine.trim() !== ""){
         const urlParams = new URLSearchParams(window.location.search);
             const userId = urlParams.get("id");
@@ -71,7 +67,6 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                             axios.request(config)
                             .then((response) => {
                                 if (response.status === 200 && response.data.statusCode === 200){
-                                    console.log(response.data.data.id);
                                     const showcaseId = response.data.data.id;
                                     
                                     // Crie um objeto com os dados do usuário
@@ -100,11 +95,11 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                                     .then((response) => {
                                         if (response.status === 200 && response.data.statusCode === 200){
                                             
-                                            if (textoOpcaoSelecionada === "Vertical"){
+                                            if (textoOpcaoSelecionada === "Listagem na Vertical"){
                                                 const nextPage = `../../Paginas/CriacaoDaVitrine.html?id=${userId}`;
                                                 window.location.href = nextPage;
                                             }
-                                            else if(textoOpcaoSelecionada === "Horizontal"){
+                                            else if(textoOpcaoSelecionada === "Listagem na Horizontal"){
                                                 const nextPage = `../../Paginas/CriacaoDaVitrine2.html?id=${userId}`;
                                                 window.location.href = nextPage;  
                                             }

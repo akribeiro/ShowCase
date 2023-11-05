@@ -115,6 +115,7 @@ function excluirProduto(id) {
     // Fazer uma solicitação para excluir o produto com o ID fornecido
     axios.delete(`/api/v1/StoreProduct/DeleteProduct/${id}`)
         .then(function (response) {
+            console.log(response);
             // Remover a linha da tabela após a exclusão bem-sucedida
             const linhaProduto = document.getElementById(`produto_${id}`);
             linhaProduto.remove();
