@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     axios.get(apiUrl)
                         .then(function (response) {
                             const vitrines = response.data.data; // Lista de vitrines
-                            console.log(vitrines);
 
                             const vitrinesContainer = document.getElementById("vitrinesContainer");
 
@@ -56,7 +55,31 @@ document.addEventListener("DOMContentLoaded", function () {
                                 excluirIcon.addEventListener("click", function () {
                                     // Ao clicar no ícone da lixeira, chame a função para excluir a vitrine
                                     excluirVitrine(vitrine.id); // Passe o ID da vitrine a ser excluída
-});
+                                });
+
+                                // Adicione o evento de clique ao ícone de edição
+                                editarIcon.addEventListener("click", function () {
+                                    const urlIdTemplates = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetAllTemplates`;
+                                    axios.get(urlIdTemplates)
+                                    .then(function (response){
+                                        const templatesLista = response.data.data; // Lista de templates
+                                        templatesLista.forEach(function(template){
+                                            const templateIdVitrine = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${vitrine.id}`;
+                                            axios.get(templateIdVitrine)
+                                            .then(function (response){
+                                                const idTemplateVitrine = response.data.data.templateId;
+                                                if(idTemplateVitrine === template.id){
+                                                    const nextPage = `../../Paginas/CriacaoDaVitrine.html?id=${userId}`;
+                                                    window.location.href = nextPage;
+                                                }
+                                                else if(idTemplateVitrine === template.id){
+                                                    const nextPage = `../../Paginas/CriacaoDaVitrine2.html?id=${userId}`;
+                                                    window.location.href = nextPage;
+                                                }
+                                            })
+                                        })
+                                    })
+                                });
 
                                 // Adicione os elementos ao DOM na hierarquia correta
                                 dFlexDiv.appendChild(editarIcon);

@@ -22,7 +22,7 @@
         crossorigin="anonymous"></script>
     <!-- Inclua o Axios após as bibliotecas jQuery e Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="module" src="../ConexaoFrontBack/Produtos/fazerRequisicao.js"></script>
+    <script type="module" src="../ConexaoFrontBack/Vitrines/pegarProdutosVitrine.js"></script>
 </head>
 
 <!-- CORPO -->
@@ -46,43 +46,6 @@
         
     </div>
 
-    <div class="mx-5 mb-5 d-flex justify-content-center align-items-center">
-        <div class="row">
-            <div class="col text-center"> <!-- Adicione a classe text-center aqui -->
-                <label for="linkBotao"><h5 class="d-flex justify-content-center">Link de redirecionamento do botão "Quero este!"</h5></label>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="linkBotao" placeholder="Link">
-                </div>
-                <button class="btn mt-2 mb-3" style="background-color: #F0A732;" type="submit">Salvar Link</button>
-            </div>
-        </div>
-    </div>
 </body>
-
-<footer class="bottom-0 footer navbar-fixed bg-dark d-flex justify-content-between px-5" style="position: fixed; width: 100%">
-    <div class="d-flex me-3">
-        <div class="dropdown me-3">
-            <button type="button" class="btn btn-icon p-0" data-bs-toggle="dropdown" style="border: none;">
-                <i class="bi bi-plus-lg" style="color: #F0A732; font-size: xx-large;"></i>
-            </button>
-        
-            <ul class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
-                <li id="produtosLista"></li>
-            </ul>
-        </div>
-
-        <div>
-            <button type="button" class="btn btn-icon p-0" data-bs-toggle="dropdown" style="border: none;">
-                <i class="bi bi-palette2" style="color: #F0A732; font-size: xx-large;"></i>
-            </button>
-            <ul class="dropdown-menu">
-                <li><input type="color" class="dropdown-item"></input></li>
-            </ul>
-        </div>
-    </div>
-    <div class="d-flex align-items-center" id="modelosVitrines">
-        <!-- modelos das vitrines adicionados dinamicamente -->
-    </div>
-</footer>
 
 </html>
