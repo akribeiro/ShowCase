@@ -4,13 +4,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const userId = urlParams.get("id");
 
     if (userId) {
-        const apiUrl = `https://localhost:7058/api/v1/Store/GetAllStoresByUserId/${userId}`;
+        const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
         axios.get(apiUrl)
             .then(function (response) {
                 if (response.status === 200 && response.data.statusCode === 200) {
                     const storeId = response.data.data[0].id;
 
-                    const apiUrl = `https://localhost:7058/api/v1/Showcase/GetAllShowcasesByStoreId/${storeId}`;
+                    const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Showcase/GetAllShowcasesByStoreId/${storeId}`;
                     axios.get(apiUrl)
                         .then(function (response) {
                             const vitrines = response.data.data; // Lista de vitrines
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function excluirVitrine(vitrineId) {
-    const apiUrl = `https://localhost:7058/api/v1/Showcase/${vitrineId}`;
+    const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Showcase/${vitrineId}`;
 
     axios.delete(apiUrl)
         .then(function (response) {

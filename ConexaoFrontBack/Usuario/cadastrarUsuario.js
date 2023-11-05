@@ -32,7 +32,7 @@ document.getElementById('formularioCadastro').addEventListener('submit', functio
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'https://localhost:7058/api/v1/Auth/Register',
+            url: 'https://showcase-api.azurewebsites.net/api/v1/Auth/Register',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': ''
@@ -60,7 +60,7 @@ document.getElementById('formularioCadastro').addEventListener('submit', functio
                 let configStore = {
                     method: 'post',
                     maxBodyLength: Infinity,
-                    url: 'https://localhost:7058/api/v1/Store',
+                    url: 'https://showcase-api.azurewebsites.net/api/v1/Store',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': ''

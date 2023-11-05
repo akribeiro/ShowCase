@@ -33,7 +33,7 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                 console.log("UserId inválido.");
             } else {
                 // Define a URL da API para obter os detalhes da loja com base no userId
-                const apiUrl = `https://localhost:7058/api/v1/Store/GetAllStoresByUserId/${userId}`;
+                const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
 
                 // Faz a solicitação para obter os detalhes da loja
                 axios.get(apiUrl)
@@ -56,7 +56,7 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                             let config = {
                                 method: 'post',
                                 maxBodyLength: Infinity,
-                                url: 'https://localhost:7058/api/v1/Showcase',
+                                url: 'https://showcase-api.azurewebsites.net/api/v1/Showcase',
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'Authorization': ''
@@ -83,7 +83,7 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                                     let config = {
                                         method: 'post',
                                         maxBodyLength: Infinity,
-                                        url: 'https://localhost:7058/api/v1/ShowcaseStyle',
+                                        url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
                                         headers: {
                                             'Content-Type': 'application/json',
                                             'Authorization': ''
@@ -131,7 +131,7 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
 // Função para carregar as opções de estilo de vitrine
 function carregarOpcoesDeEstilo() {
     // Fazer a solicitação para obter as opções de estilo
-    axios.get('https://localhost:7058/api/v1/ShowcaseStyle/GetAllTemplates')
+    axios.get('https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetAllTemplates')
         .then((response) => {
             if (response.status === 200 && response.data.statusCode === 200) {
                 const opcoesDeEstilo = response.data.data;

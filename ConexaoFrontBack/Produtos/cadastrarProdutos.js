@@ -6,7 +6,7 @@ document.getElementById('formularioProduto').addEventListener('submit', function
 
     // Verifica se há um userId válido
     if (userId) {
-        const apiUrl = `https://localhost:7058/api/v1/Store/GetAllStoresByUserId/${userId}`;
+        const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
         // Fazer uma solicitação à API para obter o storeId
         axios.get(apiUrl)
             .then((response) => {
@@ -36,7 +36,7 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                     let config = {
                         method: 'post',
                         maxBodyLength: Infinity,
-                        url: 'https://localhost:7058/api/v1/StoreProduct/CreateProduct',
+                        url: 'https://showcase-api.azurewebsites.net/api/v1/StoreProduct/CreateProduct',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': ''

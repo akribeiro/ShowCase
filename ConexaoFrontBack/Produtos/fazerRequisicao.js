@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const userId = urlParams.get("id");
     // Verifica se há um userId válido
     if (userId) {
-        const apiUrl = `https://localhost:7058/api/v1/Store/GetAllStoresByUserId/${userId}`;
+        const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
 
                 // Faz a solicitação para obter os detalhes da loja
                 axios.get(apiUrl)
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             // PEGAR AQUI O storeId para criar uma nova vitrine
                             const storeId = response.data.data[0].id;
 
-                            const searchUrl = `https://localhost:7058/api/v1/StoreProduct/GetAllProductsByStoreId/${storeId}`;
+                            const searchUrl = `https://showcase-api.azurewebsites.net/api/v1/StoreProduct/GetAllProductsByStoreId/${storeId}`;
 
                             // Fazer uma solicitação ao banco de dados para obter a lista de produtos
                             axios.get(searchUrl)
