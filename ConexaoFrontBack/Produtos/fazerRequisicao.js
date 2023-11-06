@@ -76,13 +76,56 @@ document.addEventListener("DOMContentLoaded", function () {
                                     link.innerHTML = `<i class="bi bi-window-stack" style="color: #F0A732; font-size: xx-large;"></i>`;
                                     modeloVitrine.appendChild(link);
                                     contagem++;
-
                                     // Adicione um ouvinte de evento de clique a esta tag <a>
                                     link.addEventListener("click", function (event) {
                                         event.preventDefault(); // Impede que o link redirecione imediatamente
-                                        //ADICIONAR CÓDIGO DE EDIÇÃO DE ESTILO AQUI
-                                        const novaURL = `./CriacaoDaVitrine.html`;
-                                        window.location.href = novaURL;
+
+                                        const checkbox1 = document.getElementById("checkbox1");
+                                        const checkbox2 = document.getElementById("checkbox2");
+                                        const mostrarValor = checkbox1.checked;
+                                        const mostrarImagem = checkbox2.checked;
+
+                                        const showcaseId = localStorage.getItem("showcaseId");
+                                        const templateId = vitrines[0].id;
+                                        const selectedColor = colorPicker.value;
+                                        const showProductValue = mostrarValor;
+                                        const showStoreLogo = mostrarImagem;
+
+                                        const postData = {
+                                            id: showcaseId,
+                                            templateId: templateId,
+                                            backgroundColor: selectedColor,
+                                            showProductValue: showProductValue,
+                                            showStoreLogo: showStoreLogo,
+                                        };
+
+                                        let data = JSON.stringify({
+                                            "id": postData.id,
+                                            "templateId": postData.templateId,
+                                            "backgroundColorCode": postData.backgroundColor,
+                                            "showProductValue": postData.showProductValue,
+                                            "showStoreLogo": postData.showStoreLogo
+                                        });
+
+                                        let config = {
+                                            method: 'post',
+                                            maxBodyLength: Infinity,
+                                            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': ''
+                                            },
+                                            data: data
+                                        };
+
+                                        axios.request(config)
+                                            .then((response) => {
+                                                const novaURL = `./CriacaoDaVitrine.html`;
+                                                window.location.href = novaURL;
+                                            })
+                                            .catch((error) => {
+                                                console.log(error);
+                                            });
                                     });
                                 } else if (contagem === 2) {
                                     const link = document.createElement("a");
@@ -94,9 +137,52 @@ document.addEventListener("DOMContentLoaded", function () {
                                     // Adicione um ouvinte de evento de clique a esta tag <a>
                                     link.addEventListener("click", function (event) {
                                         event.preventDefault(); // Impede que o link redirecione imediatamente
-                                        //ADICIONAR CÓDIGO DE EDIÇÃO DE ESTILO AQUI
-                                        const novaURL = `./CriacaoDaVitrine2.html`;
-                                        window.location.href = novaURL;
+                                        const checkbox1 = document.getElementById("checkbox1");
+                                        const checkbox2 = document.getElementById("checkbox2");
+                                        const mostrarValor = checkbox1.checked;
+                                        const mostrarImagem = checkbox2.checked;
+
+                                        const showcaseId = localStorage.getItem("showcaseId");
+                                        const templateId = vitrines[1].id;
+                                        const selectedColor = colorPicker.value;
+                                        const showProductValue = mostrarValor;
+                                        const showStoreLogo = mostrarImagem;
+
+                                        const postData = {
+                                            id: showcaseId,
+                                            templateId: templateId,
+                                            backgroundColor: selectedColor,
+                                            showProductValue: showProductValue,
+                                            showStoreLogo: showStoreLogo,
+                                        };
+
+                                        let data = JSON.stringify({
+                                            "id": postData.id,
+                                            "templateId": postData.templateId,
+                                            "backgroundColorCode": postData.backgroundColor,
+                                            "showProductValue": postData.showProductValue,
+                                            "showStoreLogo": postData.showStoreLogo
+                                        });
+
+                                        let config = {
+                                            method: 'post',
+                                            maxBodyLength: Infinity,
+                                            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': ''
+                                            },
+                                            data: data
+                                        };
+
+                                        axios.request(config)
+                                            .then((response) => {
+                                                const novaURL = `./CriacaoDaVitrine2.html`;
+                                                window.location.href = novaURL;
+                                            })
+                                            .catch((error) => {
+                                                console.log(error);
+                                            });
                                     });
                                 }
                             });
@@ -307,4 +393,183 @@ sendColorButton.addEventListener("click", function () {
             console.log(error);
         });
 
+});
+
+
+const sendStyleButton = document.querySelector(".send-styles"); // Selecione o botão
+
+sendStyleButton.addEventListener("click", function () {
+    const checkbox1 = document.getElementById("checkbox1");
+    const checkbox2 = document.getElementById("checkbox2");
+    const mostrarValor = checkbox1.checked;
+    const mostrarImagem = checkbox2.checked;
+    
+    if(mostrarValor === true && mostrarImagem === true){
+        const showcaseId = localStorage.getItem("showcaseId");
+        const templateId = localStorage.getItem("templateId");
+        const selectedColor = colorPicker.value;
+        const showProductValue = mostrarValor;
+        const showStoreLogo = mostrarImagem;
+
+        const postData = {
+            id: showcaseId,
+            templateId: templateId,
+            backgroundColor: selectedColor,
+            showProductValue: showProductValue,
+            showStoreLogo: showStoreLogo,
+        };
+
+        let data = JSON.stringify({
+            "id": postData.id,
+            "templateId": postData.templateId,
+            "backgroundColorCode": postData.backgroundColor,
+            "showProductValue": postData.showProductValue,
+            "showStoreLogo": postData.showStoreLogo
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': ''
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                console.log("ESTILO ALTERADO COM SUCESSO!");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    else if(mostrarValor === false && mostrarImagem === true){
+        const showcaseId = localStorage.getItem("showcaseId");
+        const templateId = localStorage.getItem("templateId");
+        const selectedColor = colorPicker.value;
+        const showProductValue = mostrarValor;
+        const showStoreLogo = mostrarImagem;
+
+        const postData = {
+            id: showcaseId,
+            templateId: templateId,
+            backgroundColor: selectedColor,
+            showProductValue: showProductValue,
+            showStoreLogo: showStoreLogo,
+        };
+
+        let data = JSON.stringify({
+            "id": postData.id,
+            "templateId": postData.templateId,
+            "backgroundColorCode": postData.backgroundColor,
+            "showProductValue": postData.showProductValue,
+            "showStoreLogo": postData.showStoreLogo
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': ''
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                console.log("ESTILO ALTERADO COM SUCESSO!");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    else if(mostrarValor === true && mostrarImagem === false){
+        const showcaseId = localStorage.getItem("showcaseId");
+        const templateId = localStorage.getItem("templateId");
+        const selectedColor = colorPicker.value;
+        const showProductValue = mostrarValor;
+        const showStoreLogo = mostrarImagem;
+
+        const postData = {
+            id: showcaseId,
+            templateId: templateId,
+            backgroundColor: selectedColor,
+            showProductValue: showProductValue,
+            showStoreLogo: showStoreLogo,
+        };
+
+        let data = JSON.stringify({
+            "id": postData.id,
+            "templateId": postData.templateId,
+            "backgroundColorCode": postData.backgroundColor,
+            "showProductValue": postData.showProductValue,
+            "showStoreLogo": postData.showStoreLogo
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': ''
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                console.log("ESTILO ALTERADO COM SUCESSO!");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    else if(mostrarValor === false && mostrarImagem === false){
+        const showcaseId = localStorage.getItem("showcaseId");
+        const templateId = localStorage.getItem("templateId");
+        const selectedColor = colorPicker.value;
+        const showProductValue = mostrarValor;
+        const showStoreLogo = mostrarImagem;
+
+        const postData = {
+            id: showcaseId,
+            templateId: templateId,
+            backgroundColor: selectedColor,
+            showProductValue: showProductValue,
+            showStoreLogo: showStoreLogo,
+        };
+
+        let data = JSON.stringify({
+            "id": postData.id,
+            "templateId": postData.templateId,
+            "backgroundColorCode": postData.backgroundColor,
+            "showProductValue": postData.showProductValue,
+            "showStoreLogo": postData.showStoreLogo
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': ''
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                console.log("ESTILO ALTERADO COM SUCESSO!");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 });
