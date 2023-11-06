@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (userId) {
         const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
-        let searchUrl = ""; // Declare a variável aqui
+        let searchUrl = "";
 
         // Fazer uma solicitação à API para obter o storeId
         axios.request(apiUrl)
@@ -66,6 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
                                 botoesContainer.appendChild(editarLink);
                                 editarBtn.style.marginRight = "5px";
 
+                                editarBtn.addEventListener("click", function () {
+                                    const productId = produto.id;
+                                    localStorage.setItem("productId", productId);
+                                    window.location.href = `./EditarProduto.html`;
+                                });
+
                                 const excluirLink = document.createElement("a");
                                 excluirLink.href = "#";
                                 excluirLink.style.textDecoration = "none";
@@ -112,7 +118,6 @@ function excluirProduto(id) {
     // Fazer uma solicitação para excluir o produto com o ID fornecido
     axios.delete(`https://showcase-api.azurewebsites.net/api/v1/StoreProduct/DeleteProduct/${id}`)
         .then(function (response) {
-            console.log(response);
             // Remover a linha da tabela após a exclusão bem-sucedida
             const linhaProduto = document.getElementById(`produto_${id}`);
             linhaProduto.remove();
