@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Pegar userId da URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("id");
+    const userId = localStorage.getItem("userId");
 
     if (userId) {
         const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
@@ -64,9 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                     .then(function (response){
                                         const templatesLista = response.data.data; // Lista de templates
                                         templatesLista.forEach(function(template){
+
                                             const templateIdVitrine = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${vitrine.id}`;
                                             axios.get(templateIdVitrine)
                                             .then(function (response){
+
                                                 const idTemplateVitrine = response.data.data.templateId;
                                                 if(idTemplateVitrine === template.id){
                                                     const nextPage = `../../Paginas/CriacaoDaVitrine.html?id=${userId}`;

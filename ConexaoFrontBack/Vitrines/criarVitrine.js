@@ -1,10 +1,10 @@
 document.getElementById("criarProduto").addEventListener("click", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("id");
+    const userId = localStorage.getItem("userId");
+    console.log(userId);
 
     // Verifica se há um userId válido
     if (userId) {
-        const nextPage = `../../Paginas/Produtos.html?id=${userId}`;
+        const nextPage = `../../Paginas/Produtos.html`;
         window.location.href = nextPage;
     } else {
         console.log("UserId não encontrado na URL.");
@@ -25,8 +25,7 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
     var textoOpcaoSelecionada = opcaoSelecionada.options[opcoesSelect.selectedIndex].innerText;
 
     if (nomeVitrine.trim() !== ""){
-        const urlParams = new URLSearchParams(window.location.search);
-            const userId = urlParams.get("id");
+            const userId = localStorage.getItem("userId");
 
             // Verifica se há um userId válido
             if (!userId) {
@@ -94,13 +93,17 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                                     axios.request(config)
                                     .then((response) => {
                                         if (response.status === 200 && response.data.statusCode === 200){
-                                            
+                                            const showcaseStyleId = response.data.data.id;
                                             if (textoOpcaoSelecionada === "Listagem na Vertical"){
-                                                const nextPage = `../../Paginas/CriacaoDaVitrine.html?id=${userId}`;
+                                                localStorage.setItem("showcaseStyleId", showcaseStyleId);
+                                                localStorage.setItem("showcaseId", showcaseId);
+                                                const nextPage = `../../Paginas/CriacaoDaVitrine.html`;
                                                 window.location.href = nextPage;
                                             }
                                             else if(textoOpcaoSelecionada === "Listagem na Horizontal"){
-                                                const nextPage = `../../Paginas/CriacaoDaVitrine2.html?id=${userId}`;
+                                                localStorage.setItem("showcaseStyleId", showcaseStyleId);
+                                                localStorage.setItem("showcaseId", showcaseId);
+                                                const nextPage = `../../Paginas/CriacaoDaVitrine2.html`;
                                                 window.location.href = nextPage;  
                                             }
                                         }

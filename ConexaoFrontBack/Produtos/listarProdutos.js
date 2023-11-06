@@ -1,9 +1,8 @@
 document.getElementById("cadastrarProduto").addEventListener("click", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("id");
+    const userId = localStorage.getItem("userId");
     // Verifica se há um userId válido
     if (userId) {
-        const nextPage = `../../Paginas/CadastroDeProdutos.html?id=${userId}`;
+        const nextPage = `../../Paginas/CadastroDeProdutos.html`;
         window.location.href = nextPage;
     } else {
         console.log("UserId não encontrado na URL.");
@@ -12,8 +11,7 @@ document.getElementById("cadastrarProduto").addEventListener("click", function (
 
 document.addEventListener("DOMContentLoaded", function () {
     // Pegar userId da URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("id");
+    const userId = localStorage.getItem("userId");
 
     if (userId) {
         const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;

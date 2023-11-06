@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("id");
+    const userId = localStorage.getItem("userId");
     // Verifica se há um userId válido
     if (userId) {
         const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;

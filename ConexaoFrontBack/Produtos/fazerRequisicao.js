@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("id");
+    const userId = localStorage.getItem("userId");
     // Verifica se há um userId válido
     if (userId) {
         const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
@@ -82,9 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     link.addEventListener("click", function (event) {
                                         event.preventDefault(); // Impede que o link redirecione imediatamente
                                         //ADICIONAR CÓDIGO DE EDIÇÃO DE ESTILO AQUI
-                                        const urlParams = new URLSearchParams(window.location.search);
-                                        const id = urlParams.get("id");
-                                        const novaURL = `./CriacaoDaVitrine.html?id=${id}`;
+                                        const novaURL = `./CriacaoDaVitrine.html`;
                                         window.location.href = novaURL;
                                     });
                                 } else if (contagem === 2) {
@@ -98,9 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     link.addEventListener("click", function (event) {
                                         event.preventDefault(); // Impede que o link redirecione imediatamente
                                         //ADICIONAR CÓDIGO DE EDIÇÃO DE ESTILO AQUI
-                                        const urlParams = new URLSearchParams(window.location.search);
-                                        const id = urlParams.get("id");
-                                        const novaURL = `./CriacaoDaVitrine2.html?id=${id}`;
+                                        const novaURL = `./CriacaoDaVitrine2.html`;
                                         window.location.href = novaURL;
                                     });
                                 }
@@ -117,32 +112,132 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Função para criar um elemento de produto
 function createProductCard(produto) {
+    const showcaseId = localStorage.getItem("showcaseId");
+    const searchUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
+    axios.get(searchUrl)
+    .then(function (response) {
+        if (response.status === 200 && response.data.statusCode === 200) {
+            if(response.data.data.showProductValue == "true"){
+                localStorage.setItem("showProductValue", true);
+            }
+            else{
+                localStorage.setItem("showProductValue", false);
+            }
+            if(response.data.data.showStoreLogo === "true"){
+                localStorage.setItem("showStoreLogo", true);
+            }
+            else{
+                localStorage.setItem("showStoreLogo", false);
+            }
+            const backgroundColor = response.data.data.backgroundColorCode;
+            if(backgroundColor === null){
+                const backgroundColor = "#1af5b6";
+                localStorage.setItem("backgroundColor", backgroundColor);
+            }
+            else{
+                localStorage.setItem("backgroundColor", backgroundColor);
+            }
+        }
+        else{
+            const backgroundColor = "#1af5b6";
+            localStorage.setItem("backgroundColor", backgroundColor);
+        }
+    });
     const productCard = document.createElement("div");
     productCard.className = "card mb-2 bg-dark";
-    productCard.id=produto.id;
-    productCard.style = "color: aqua; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to left, rgb(0, 81, 156), black);background-blend-mode: overlay; border-radius: 40px; border-top-right-radius: 80px; border-bottom-right-radius: 200px;";
+    productCard.id = produto.id;
 
-    // Defina o conteúdo do cartão do produto com base nos dados do produto
-    productCard.innerHTML = `
-        <div class="row g-0 p-3">
-            <div class="col-md-3 p-2">
-                <img src="${produto.imageUrl}" class="card-img-top img-fluid" alt="${produto.name}">
-            </div>
-            <div class="col-md-8 pt-0 ps-3 mt-3">
-                <div class="card-body py-0">
-                    <h2 class="card-title" style="color: white;">${produto.name}</h2>
-                    <h5 class="card-text mb-3" style="color: deepskyblue;">Valor: R$:${produto.value} av<br>ou R$:${produto.value} em até 12x</h5>
-                    <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
-                </div>
-                <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
-                    <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
-                </div>
-            </div>
-        </div>
-    `;
+    //MUDAR A COR AQUI
+    const backgroundColor = localStorage.getItem("backgroundColor");
+    const showProductValue = localStorage.getItem("showProductValue");
+    const showStoreLogo = localStorage.getItem("showStoreLogo");
 
-    return productCard;
+    const cor = `color: ${backgroundColor}; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to left, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px; border-top-right-radius: 80px; border-bottom-right-radius: 200px;`;
+    productCard.style = cor;
+
+
+    if(showProductValue === true && showStoreLogo === true){
+        // Defina o conteúdo do cartão do produto com base nos dados do produto
+        productCard.innerHTML = `
+            <div class="row g-0 p-3">
+                <div class="col-md-3 p-2">
+                    <img src="${produto.imageUrl}" class="card-img-top img-fluid" alt="${produto.name}">
+                </div>
+                <div class="col-md-8 pt-0 ps-3 mt-3">
+                    <div class="card-body py-0">
+                        <h2 class="card-title" style="color: white;">${produto.name}</h2>
+                        <h5 class="card-text mb-3" style="color: ${backgroundColor};">Valor: R$:${produto.value} av<br>ou R$:${produto.value} em até 12x</h5>
+                        <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
+                    </div>
+                    <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
+                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return productCard;
+    }
+    else if(showProductValue === false && showStoreLogo === true){
+        productCard.innerHTML = `
+            <div class="row g-0 p-3">
+                <div class="col-md-3 p-2">
+                    <img src="${produto.imageUrl}" class="card-img-top img-fluid" alt="${produto.name}">
+                </div>
+                <div class="col-md-8 pt-0 ps-3 mt-3">
+                    <div class="card-body py-0">
+                        <h2 class="card-title" style="color: white;">${produto.name}</h2>
+                        <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
+                    </div>
+                    <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
+                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return productCard;
+    }
+    else if(showProductValue === true && showStoreLogo === false){
+        productCard.innerHTML = `
+            <div class="row g-0 p-3">
+                <div class="col-md-8 pt-0 ps-3 mt-3">
+                    <div class="card-body py-0">
+                        <h2 class="card-title" style="color: white;">${produto.name}</h2>
+                        <h5 class="card-text mb-3" style="color: ${backgroundColor};">Valor: R$:${produto.value} av<br>ou R$:${produto.value} em até 12x</h5>
+                        <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
+                    </div>
+                    <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
+                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return productCard;
+    }
+    else if(showProductValue === false && showStoreLogo === false){
+        productCard.innerHTML = `
+            <div class="row g-0 p-3">
+                <div class="col-md-8 pt-0 ps-3 mt-3">
+                    <div class="card-body py-0">
+                        <h2 class="card-title" style="color: white;">${produto.name}</h2>
+                        <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
+                    </div>
+                    <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
+                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return productCard;
+    }
+    
 }
 
 // Adicione um ouvinte de evento para os botões de exclusão

@@ -30,7 +30,8 @@ document.getElementById('formularioLogin').addEventListener('submit', function (
         if (response.status === 200 && response.data.statusCode === 200) {
             // Registro bem-sucedido, redirecione para a próxima página
             const userId = response.data.data.id;
-            const nextPage = `../../Paginas/PaginaPrincipalUsuario.html?id=${userId}`;
+            const nextPage = `../../Paginas/PaginaPrincipalUsuario.html`;
+            localStorage.setItem("userId", userId);
             window.location.href = nextPage;
         } else {
             // Exiba uma mensagem de erro ou trate de outra forma

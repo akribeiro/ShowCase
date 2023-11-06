@@ -1,8 +1,7 @@
 document.getElementById('formularioProduto').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("id");
+    const userId = localStorage.getItem("userId");
 
     // Verifica se há um userId válido
     if (userId) {
@@ -46,7 +45,7 @@ document.getElementById('formularioProduto').addEventListener('submit', function
 
                     axios.request(config)
                         .then((response) => {
-                            const nextPage = `../../Paginas/Produtos.html?id=${userId}`;
+                            const nextPage = `../../Paginas/Produtos.html`;
                             window.location.href = nextPage;
                         })
                         .catch((error) => {
