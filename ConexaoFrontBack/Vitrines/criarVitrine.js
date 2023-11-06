@@ -93,24 +93,40 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                                     axios.request(config)
                                     .then((response) => {
                                         if (response.status === 200 && response.data.statusCode === 200){
+                                            const apiUrl2 = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetAllTemplates`;
                                             const showcaseStyleId = response.data.data.id;
-                                            if (textoOpcaoSelecionada === "Listagem na Vertical"){
-                                                localStorage.setItem("showcaseStyleId", showcaseStyleId);
-                                                localStorage.setItem("showcaseId", showcaseId);
-                                                const nextPage = `../../Paginas/CriacaoDaVitrine.html`;
-                                                window.location.href = nextPage;
-                                            }
-                                            else if(textoOpcaoSelecionada === "Listagem na Horizontal"){
-                                                localStorage.setItem("showcaseStyleId", showcaseStyleId);
-                                                localStorage.setItem("showcaseId", showcaseId);
-                                                const nextPage = `../../Paginas/CriacaoDaVitrine2.html`;
-                                                window.location.href = nextPage;  
-                                            }
+                                            // Faz a solicitação para obter os modelos das vitrines
+                                            axios.get(apiUrl2)
+                                                .then((response) => {
+                                                    if (response.status === 200 && response.data.statusCode === 200) {
+                                                            if (textoOpcaoSelecionada === response.data.data[0].name){
+                                                                localStorage.setItem("showcaseStyleId", showcaseStyleId);
+                                                                localStorage.setItem("showcaseId", showcaseId);
+                                                                const templateId = response.data.data[0].id;
+                                                                localStorage.setItem("templateId", templateId);
+                                                                const nextPage = `../../Paginas/CriacaoDaVitrine.html`;
+                                                                window.location.href = nextPage;
+                                                            }
+                                                            else if(textoOpcaoSelecionada === response.data.data[1].name){
+                                                                localStorage.setItem("showcaseStyleId", showcaseStyleId);
+                                                                localStorage.setItem("showcaseId", showcaseId);
+                                                                const templateId = response.data.data[1].id;
+                                                                localStorage.setItem("templateId", templateId);
+                                                                const nextPage = `../../Paginas/CriacaoDaVitrine2.html`;
+                                                                window.location.href = nextPage;  
+                                                            }
+                                                        
+                                                    }
+                                                    else {
+                                                        console.log("Erro para pegar templates:", response.data);
+                                                    }
+                                                });
+
                                         }
                                         else{
                                             // Exiba uma mensagem de erro ou trate de outra forma
                                             console.log("Erro no registro do estilo da vitrine: " + response.data);
-                                        }
+                                        }                                        
                                     })
                                 }
                                 else{

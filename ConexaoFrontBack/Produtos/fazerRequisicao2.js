@@ -245,3 +245,53 @@ function excluirProduto(produtoId) {
     } else {
     }
 }
+
+// Selecione o elemento input pelo ID
+const colorPicker = document.getElementById("colorPicker");
+const sendColorButton = document.querySelector(".send-color"); // Selecione o botão
+
+// Adicione um ouvinte de evento para o botão
+sendColorButton.addEventListener("click", function () {
+
+    const showcaseId = localStorage.getItem("showcaseId");
+    const templateId = localStorage.getItem("templateId");
+    const selectedColor = colorPicker.value;
+    const showProductValue = localStorage.getItem("showProductValue");
+    const showStoreLogo = localStorage.getItem("showStoreLogo");
+
+    const postData = {
+        id: showcaseId,
+        templateId: templateId,
+        backgroundColor: selectedColor,
+        showProductValue: showProductValue,
+        showStoreLogo: showStoreLogo,
+    };
+
+    let data = JSON.stringify({
+        "id": postData.id,
+        "templateId": postData.templateId,
+        "backgroundColorCode": postData.backgroundColor,
+        "showProductValue": postData.showProductValue,
+        "showStoreLogo": postData.showStoreLogo
+    });
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': ''
+        },
+        data: data
+    };
+
+    axios.request(config)
+        .then((response) => {
+            console.log("COR ALTERADA COM SUCESSO!");
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+});
