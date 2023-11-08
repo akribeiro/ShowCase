@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.status === 200 && response.data.statusCode === 200) {
                     const storeId = response.data.data[0].id;
                     const storeName = response.data.data[0].name;
-                    
+
                     const lojaTronicElement = document.querySelector('.d-flex.justify-content-center.mb-0.mt-3');
 
                     if (lojaTronicElement) {
@@ -34,6 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                                 // Adicione um evento de clique para cada produto
                                 li.addEventListener("click", function () {
+                                    vincularProduto(produto);
+
                                     // Crie uma cópia do elemento do produto
                                     const productCard = createProductCard(produto);
 
@@ -206,26 +208,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.status === 200 && response.data.statusCode === 200) {
                     const array = response.data.data;
                     var arrayIds = [];
-                    for(const item of array){
+                    for (const item of array) {
                         var produtoId = item.storeProductId;
                         arrayIds.push(produtoId);
-                    }    
+                    }
                     var arrayProdutos = [];
                     for (const id of arrayIds) {
                         const apiUrl2 = `https://showcase-api.azurewebsites.net/api/v1/StoreProduct/GetProductById/${id}`;
                         try {
                             const response = await axios.request(apiUrl2);
                             const product = response.data.data;
-    
+
                             // Crie uma cópia do elemento do produto
                             const productCard = createProductCard(product);
-    
+
                             // Encontre a div "m-2" na página CriacaoDaVitrine.html
                             const m2Div = document.querySelector('.m-2');
-    
+
                             // Insira o produto na div "m-2"
                             m2Div.appendChild(productCard);
-    
+
                             // Guarde os produtos na ordem em que são processados
                             arrayProdutos.push(product);
                         } catch (error) {
@@ -236,44 +238,68 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log(response.data);
                 }
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log(error);
             });
     }
-    
+
     else {
         console.log("UserId não encontrado na URL.");
     }
 });
 
+//Adicionar produto na vitrine
+function vincularProduto(produto) {
+    const showcaseId = localStorage.getItem("showcaseId");
+    const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct/GetProductsByShowcaseId/${showcaseId}`;
+    axios.request(apiUrl)
+        .then(async (response) => {
+            if (response.status === 200 && response.data.statusCode === 200) {
+                const array = [];
+                for(const ids of response.data.data){
+                    array.push(ids.storeProductId);
+                }
+                array.push(produto.id);
+
+                // Armazena o array no localStorage após serializá-lo para JSON
+                localStorage.setItem("array", JSON.stringify(array));
+
+                const Data = {
+                    showcaseId: showcaseId,
+                    productIds: array // Usa o array atualizado
+                };
+
+                let data = JSON.stringify(Data);
+
+                let config = {
+                    method: 'put',
+                    maxBodyLength: Infinity,
+                    url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': ''
+                    },
+                    data: data
+                };
+
+                axios.request(config)
+                    .then((response) => {
+                        console.log("Produto adicionado!"); // Correção no nome do método
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
+
 // Função para criar um elemento de produto
 function createProductCard(produto) {
     const showcaseId = localStorage.getItem("showcaseId");
-    // console.log(showcaseId);
-    // console.log(produto.id);
-    // const id = produto.id;
 
-    // const Data = {
-    //     showcaseId: showcaseId,
-    //     productIds: [id]
-    // };
-
-    // let data = JSON.stringify({
-    //     "showcaseId": Data.name,
-    //     "productIds": Data.id
-    // });
-
-    // let config = {
-    //     method: 'put',
-    //     maxBodyLength: Infinity,
-    //     url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': ''
-    //     },
-    //     data: data
-    // };
-    
     const searchUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
     axios.get(searchUrl)
         .then(function (response) {
@@ -409,14 +435,57 @@ document.addEventListener("click", function (event) {
 });
 
 function excluirProduto(produtoId) {
-    console.log(`Excluir produto com ID: ${produtoId}`);
+    const showcaseId = localStorage.getItem("showcaseId");
+    const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct/GetProductsByShowcaseId/${showcaseId}`;
+    axios.request(apiUrl)
+        .then(async (response) => {
+            if (response.status === 200 && response.data.statusCode === 200) {
+                const array = [];
+                for(const ids of response.data.data){
+                    array.push(ids.storeProductId);
+                }
+                var contador = 0;
 
-    // COLOCAR CODIGO PARA REMOVER PRODUTO DA VITRINE AQUI.
-    const produtoElement = document.getElementById(produtoId);
-    if (produtoElement) {
-        produtoElement.remove();
-    } else {
-    }
+                for (let i = 0; i < array.length; i++) {
+                    if (array[i] === produtoId) {
+                        array.splice(i, 1); // Remove o elemento encontrado
+                        break;
+                    } else {
+                        console.log("Nenhum produto encontrado!");
+                    }
+                }
+                const Data = {
+                    showcaseId: showcaseId,
+                    productIds: array// Usa o array atualizado
+                };
+
+                let data = JSON.stringify(Data);
+
+                let config = {
+                    method: 'put',
+                    maxBodyLength: Infinity,
+                    url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': ''
+                    },
+                    data: data
+                };
+
+                axios.request(config)
+                    .then((response) => {
+                        const produtoElement = document.getElementById(produtoId);
+                        if (produtoElement) {
+                            produtoElement.remove();
+                        } else {
+                            console.log("Erro ao retirar produto da pagina");
+                        } // Correção no nome do método
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        })
 }
 
 // Selecione o elemento input pelo ID
@@ -468,6 +537,7 @@ sendStyleButton.addEventListener("click", function () {
             console.log(showcaseStyleId);
             console.log(response);
             console.log("ESTILO ALTERADO COM SUCESSO!");
+            location.reload();
         })
         .catch((error) => {
             console.log(error);

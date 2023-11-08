@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const showcaseStyleId = localStorage.getItem("showcaseStyleId");
     const showcaseId = localStorage.getItem("showcaseId");
     // Verifica se há um userId válido
+    //carrega listagem de produtos
     if (userId) {
         const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
 
@@ -36,6 +37,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                                     // Adicione um evento de clique para cada produto
                                     li.addEventListener("click", function () {
+                                        vincularProduto(produto);
+
                                         // Crie uma cópia do elemento do produto
                                         const productCard = createProductCard(produto);
 
@@ -58,6 +61,8 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.log("UserId não encontrado na URL.");
     }
+
+    //cria botões de modelos da vitrine
     if (userId) {
         const apiUrl2 = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetAllTemplates`;
 
@@ -194,22 +199,119 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.log("UserId não encontrado na URL.");
     }
+
+    //Carregar produtos da vitrine
+    if (userId) {
+        const showcaseId = localStorage.getItem("showcaseId");
+        const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct/GetProductsByShowcaseId/${showcaseId}`;
+        axios.request(apiUrl)
+            .then(async (response) => {
+                if (response.status === 200 && response.data.statusCode === 200) {
+                    const array = response.data.data;
+                    var arrayIds = [];
+                    for (const item of array) {
+                        var produtoId = item.storeProductId;
+                        arrayIds.push(produtoId);
+                    }
+                    var arrayProdutos = [];
+                    for (const id of arrayIds) {
+                        const apiUrl2 = `https://showcase-api.azurewebsites.net/api/v1/StoreProduct/GetProductById/${id}`;
+                        try {
+                            const response = await axios.request(apiUrl2);
+                            const product = response.data.data;
+
+                            // Crie uma cópia do elemento do produto
+                            const productCard = createProductCard(product);
+
+                            // Encontre a div "m-2" na página CriacaoDaVitrine.html
+                            const Div = document.querySelector('.row.mx-auto');
+
+                            // Insira o produto na div "m-2"
+                            Div.appendChild(productCard);
+
+                            // Guarde os produtos na ordem em que são processados
+                            arrayProdutos.push(product);
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                } else {
+                    console.log(response.data);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    else {
+        console.log("UserId não encontrado na URL.");
+    }
 });
+
+//Adicionar produto na vitrine
+function vincularProduto(produto) {
+    const showcaseId = localStorage.getItem("showcaseId");
+    const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct/GetProductsByShowcaseId/${showcaseId}`;
+    axios.request(apiUrl)
+        .then(async (response) => {
+            if (response.status === 200 && response.data.statusCode === 200) {
+                const array = [];
+                for(const ids of response.data.data){
+                    array.push(ids.storeProductId);
+                }
+                array.push(produto.id);
+
+                // Armazena o array no localStorage após serializá-lo para JSON
+                localStorage.setItem("array", JSON.stringify(array));
+
+                const Data = {
+                    showcaseId: showcaseId,
+                    productIds: array // Usa o array atualizado
+                };
+
+                let data = JSON.stringify(Data);
+
+                let config = {
+                    method: 'put',
+                    maxBodyLength: Infinity,
+                    url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': ''
+                    },
+                    data: data
+                };
+
+                axios.request(config)
+                    .then((response) => {
+                        console.log("Produto adicionado!"); // Correção no nome do método
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
 // Função para criar um elemento de produto
 function createProductCard(produto) {
     const showcaseId = localStorage.getItem("showcaseId");
+
     const searchUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
     axios.get(searchUrl)
     .then(function (response) {
         if (response.status === 200 && response.data.statusCode === 200) {
-            if(response.data.data.showProductValue == "true"){
+            if(response.data.data.showProductValue == true){
                 localStorage.setItem("showProductValue", true);
             }
             else{
                 localStorage.setItem("showProductValue", false);
             }
-            if(response.data.data.showStoreLogo === "true"){
+            if(response.data.data.showStoreLogo === true){
                 localStorage.setItem("showStoreLogo", true);
             }
             else{
@@ -238,7 +340,7 @@ function createProductCard(produto) {
     const showProductValue = localStorage.getItem("showProductValue");
     const showStoreLogo = localStorage.getItem("showStoreLogo");
 
-    if(showProductValue === true && showStoreLogo === true){
+    if(showProductValue === "true" && showStoreLogo === "true"){
         // Defina o conteúdo do cartão do produto com base nos dados do produto
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
@@ -259,7 +361,7 @@ function createProductCard(produto) {
 
         return customProductCard;
     }
-    else if(showProductValue === false && showStoreLogo === true){
+    else if(showProductValue === "false" && showStoreLogo === "true"){
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
                 <div class="d-flex justify-content-center">
@@ -278,7 +380,7 @@ function createProductCard(produto) {
 
         return customProductCard;
     }
-    else if(showProductValue === true && showStoreLogo === false){
+    else if(showProductValue === "true" && showStoreLogo === "false"){
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
                 <div class="d-flex flex-column">
@@ -295,7 +397,7 @@ function createProductCard(produto) {
 
         return customProductCard;
     }
-    else if(showProductValue === false && showStoreLogo === false){
+    else if(showProductValue === "false" && showStoreLogo === "false"){
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
                 <div class="d-flex flex-column">
@@ -322,47 +424,103 @@ document.addEventListener("click", function (event) {
 });
 
 function excluirProduto(produtoId) {
-    console.log(`Excluir produto com ID: ${produtoId}`);
-    
-    // COLOCAR CODIGO PARA REMOVER PRODUTO DA VITRINE AQUI.
-    const produtoElement = document.getElementById(produtoId);
-    if (produtoElement) {
-        produtoElement.remove();
-    } else {
-    }
+    const showcaseId = localStorage.getItem("showcaseId");
+    const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct/GetProductsByShowcaseId/${showcaseId}`;
+    axios.request(apiUrl)
+        .then(async (response) => {
+            if (response.status === 200 && response.data.statusCode === 200) {
+                const array = [];
+                for(const ids of response.data.data){
+                    array.push(ids.storeProductId);
+                }
+                var contador = 0;
+
+                for (let i = 0; i < array.length; i++) {
+                    if (array[i] === produtoId) {
+                        array.splice(i, 1); // Remove o elemento encontrado
+                        break;
+                    } else {
+                        console.log("Nenhum produto encontrado!");
+                    }
+                }
+
+                const Data = {
+                    showcaseId: showcaseId,
+                    productIds: array// Usa o array atualizado
+                };
+
+                let data = JSON.stringify(Data);
+
+                let config = {
+                    method: 'put',
+                    maxBodyLength: Infinity,
+                    url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': ''
+                    },
+                    data: data
+                };
+
+                axios.request(config)
+                    .then((response) => {
+                        const produtoElement = document.getElementById(produtoId);
+                        if (produtoElement) {
+                            produtoElement.remove();
+                        } else {
+                            console.log("Erro ao retirar produto da pagina");
+                        } // Correção no nome do método
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        })
 }
 
 // Selecione o elemento input pelo ID
 const colorPicker = document.getElementById("colorPicker");
-const sendColorButton = document.querySelector(".send-color"); // Selecione o botão
 
-// Adicione um ouvinte de evento para o botão
-sendColorButton.addEventListener("click", function () {
+const sendStyleButton = document.querySelector(".send-styles"); // Selecione o botão
 
-    const showcaseId = localStorage.getItem("showcaseId");
+sendStyleButton.addEventListener("click", function () {
+    const checkbox1 = document.getElementById("checkbox1");
+    const checkbox2 = document.getElementById("checkbox2");
+    const mostrarValor = checkbox1.checked;
+    const mostrarImagem = checkbox2.checked;
+
+    const showcaseStyleId = localStorage.getItem("showcaseStyleId");
     const templateId = localStorage.getItem("templateId");
     const selectedColor = colorPicker.value;
-    const showProductValue = localStorage.getItem("showProductValue");
-    const showStoreLogo = localStorage.getItem("showStoreLogo");
+    const showProductValue = mostrarValor;
+    const showStoreLogo = mostrarImagem;
 
     const postData = {
-        id: showcaseId,
+        showcaseStyleId: showcaseStyleId,
         templateId: templateId,
         backgroundColor: selectedColor,
-        showProductValue: showProductValue,
-        showStoreLogo: showStoreLogo,
+        showProductValue: Boolean(showProductValue),
+        showStoreLogo: Boolean(showStoreLogo),
     };
 
+    console.log(postData.showcaseStyleId);
+    console.log(postData.templateId);
+    console.log(postData.backgroundColor);
+    console.log(postData.showProductValue);
+    console.log(postData.showStoreLogo);
+
     let data = JSON.stringify({
-        "id": postData.id,
+        "showcaseStyleId": postData.showcaseStyleId,
         "templateId": postData.templateId,
         "backgroundColorCode": postData.backgroundColor,
         "showProductValue": postData.showProductValue,
         "showStoreLogo": postData.showStoreLogo
     });
 
+    console.log(data);
+
     let config = {
-        method: 'post',
+        method: 'put',
         maxBodyLength: Infinity,
         url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
         headers: {
@@ -374,189 +532,10 @@ sendColorButton.addEventListener("click", function () {
 
     axios.request(config)
         .then((response) => {
-            console.log("COR ALTERADA COM SUCESSO!");
+            console.log("ESTILO ALTERADO COM SUCESSO!");
+            location.reload();
         })
         .catch((error) => {
             console.log(error);
         });
-
-});
-
-
-const sendStyleButton = document.querySelector(".send-styles"); // Selecione o botão
-
-sendStyleButton.addEventListener("click", function () {
-    const checkbox1 = document.getElementById("checkbox1");
-    const checkbox2 = document.getElementById("checkbox2");
-    const mostrarValor = checkbox1.checked;
-    const mostrarImagem = checkbox2.checked;
-    
-    if(mostrarValor === true && mostrarImagem === true){
-        const showcaseId = localStorage.getItem("showcaseId");
-        const templateId = localStorage.getItem("templateId");
-        const selectedColor = colorPicker.value;
-        const showProductValue = mostrarValor;
-        const showStoreLogo = mostrarImagem;
-
-        const postData = {
-            id: showcaseId,
-            templateId: templateId,
-            backgroundColor: selectedColor,
-            showProductValue: showProductValue,
-            showStoreLogo: showStoreLogo,
-        };
-
-        let data = JSON.stringify({
-            "id": postData.id,
-            "templateId": postData.templateId,
-            "backgroundColorCode": postData.backgroundColor,
-            "showProductValue": postData.showProductValue,
-            "showStoreLogo": postData.showStoreLogo
-        });
-
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': ''
-            },
-            data: data
-        };
-
-        axios.request(config)
-            .then((response) => {
-                console.log("ESTILO ALTERADO COM SUCESSO!");
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-    else if(mostrarValor === false && mostrarImagem === true){
-        const showcaseId = localStorage.getItem("showcaseId");
-        const templateId = localStorage.getItem("templateId");
-        const selectedColor = colorPicker.value;
-        const showProductValue = mostrarValor;
-        const showStoreLogo = mostrarImagem;
-
-        const postData = {
-            id: showcaseId,
-            templateId: templateId,
-            backgroundColor: selectedColor,
-            showProductValue: showProductValue,
-            showStoreLogo: showStoreLogo,
-        };
-
-        let data = JSON.stringify({
-            "id": postData.id,
-            "templateId": postData.templateId,
-            "backgroundColorCode": postData.backgroundColor,
-            "showProductValue": postData.showProductValue,
-            "showStoreLogo": postData.showStoreLogo
-        });
-
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': ''
-            },
-            data: data
-        };
-
-        axios.request(config)
-            .then((response) => {
-                console.log("ESTILO ALTERADO COM SUCESSO!");
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-    else if(mostrarValor === true && mostrarImagem === false){
-        const showcaseId = localStorage.getItem("showcaseId");
-        const templateId = localStorage.getItem("templateId");
-        const selectedColor = colorPicker.value;
-        const showProductValue = mostrarValor;
-        const showStoreLogo = mostrarImagem;
-
-        const postData = {
-            id: showcaseId,
-            templateId: templateId,
-            backgroundColor: selectedColor,
-            showProductValue: showProductValue,
-            showStoreLogo: showStoreLogo,
-        };
-
-        let data = JSON.stringify({
-            "id": postData.id,
-            "templateId": postData.templateId,
-            "backgroundColorCode": postData.backgroundColor,
-            "showProductValue": postData.showProductValue,
-            "showStoreLogo": postData.showStoreLogo
-        });
-
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': ''
-            },
-            data: data
-        };
-
-        axios.request(config)
-            .then((response) => {
-                console.log("ESTILO ALTERADO COM SUCESSO!");
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-    else if(mostrarValor === false && mostrarImagem === false){
-        const showcaseId = localStorage.getItem("showcaseId");
-        const templateId = localStorage.getItem("templateId");
-        const selectedColor = colorPicker.value;
-        const showProductValue = mostrarValor;
-        const showStoreLogo = mostrarImagem;
-
-        const postData = {
-            id: showcaseId,
-            templateId: templateId,
-            backgroundColor: selectedColor,
-            showProductValue: showProductValue,
-            showStoreLogo: showStoreLogo,
-        };
-
-        let data = JSON.stringify({
-            "id": postData.id,
-            "templateId": postData.templateId,
-            "backgroundColorCode": postData.backgroundColor,
-            "showProductValue": postData.showProductValue,
-            "showStoreLogo": postData.showStoreLogo
-        });
-
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': ''
-            },
-            data: data
-        };
-
-        axios.request(config)
-            .then((response) => {
-                console.log("ESTILO ALTERADO COM SUCESSO!");
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
 });
