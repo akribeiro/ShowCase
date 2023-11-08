@@ -22,14 +22,16 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                         storeId: storeId,
                         name: produto,
                         value: parseFloat(valor),
-                        sku: sku
+                        sku: sku,
+                        description: descricao
                     };
 
                     let data = JSON.stringify({
                         "storeId": postData.storeId,
                         "name": postData.name,
                         "value": postData.value,
-                        "sku": postData.sku
+                        "sku": postData.sku,
+                        "description": postData.description
                     });
 
                     let config = {

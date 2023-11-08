@@ -40,6 +40,7 @@ document.getElementById("criarVitrine").addEventListener("click", function () {
                         if (response.status === 200 && response.data.statusCode === 200) {
                             // PEGAR AQUI O storeId para criar uma nova vitrine
                             const storeId = response.data.data[0].id;
+                            localStorage.setItem("storeId", storeId);
 
                             // Crie um objeto com os dados do usuário
                             const vitrineData = {
