@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (true){
                 const productName = response.data.data.name;
                 const productValue = response.data.data.value;
-                const productDescription = "";
+                const productDescription = response.data.data.description;
                 const productSku = response.data.data.sku;
                 const productImg = "";
 
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         const novoNome = inputProduto.value;
         const novoValor = inputValor.value;
-        // const novaDescricao = inputDescricao.value;
+        const novaDescricao = inputDescricao.value;
         const novoSku = inputSku.value;
         // const novaImagem = inputImagemProduto.value;
 
@@ -48,8 +48,17 @@ document.addEventListener("DOMContentLoaded", function () {
             id: productId,
             name: novoNome,
             value: parseFloat(novoValor),
-            sku: novoSku
+            sku: novoSku,
+            description: novaDescricao
         };
+
+        let data = JSON.stringify({
+            "productId": postData.id,
+            "name": postData.name,
+            "value": postData.value,
+            "sku": postData.sku,
+            "description": postData.description 
+        });
 
         // Use o método PUT em vez de POST
         let config = {
@@ -60,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 'Content-Type': 'application/json',
                 'Authorization': ''
             },
-            data: postData // Use o objeto postData diretamente
+            data: data
         };
 
         axios.request(config)

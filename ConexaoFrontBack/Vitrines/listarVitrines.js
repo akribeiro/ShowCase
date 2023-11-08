@@ -70,11 +70,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                                                 const idTemplateVitrine = response.data.data.templateId;
                                                 if(idTemplateVitrine === template.id){
-                                                    const nextPage = `../../Paginas/CriacaoDaVitrine.html?id=${userId}`;
+                                                    localStorage.setItem("showcaseId", vitrine.id);
+                                                    const nextPage = `../../Paginas/CriacaoDaVitrine.html`;
                                                     window.location.href = nextPage;
                                                 }
                                                 else if(idTemplateVitrine === template.id){
-                                                    const nextPage = `../../Paginas/CriacaoDaVitrine2.html?id=${userId}`;
+                                                    localStorage.setItem("showcaseId", vitrine.id);
+                                                    const nextPage = `../../Paginas/CriacaoDaVitrine2.html`;
                                                     window.location.href = nextPage;
                                                 }
                                             })

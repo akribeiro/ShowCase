@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("userId");
-
     //carrrega lista de produtos
     if (userId) {
         const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
@@ -318,7 +317,7 @@ function createProductCard(produto) {
                 }
                 const backgroundColor = response.data.data.backgroundColorCode;
                 if (backgroundColor === null) {
-                    const backgroundColor = "#1af5b6";
+                    const backgroundColor = "#F0A732";
                     localStorage.setItem("backgroundColor", backgroundColor);
                 }
                 else {
@@ -326,7 +325,7 @@ function createProductCard(produto) {
                 }
             }
             else {
-                const backgroundColor = "#1af5b6";
+                const backgroundColor = "#F0A732";
                 localStorage.setItem("backgroundColor", backgroundColor);
             }
         });
