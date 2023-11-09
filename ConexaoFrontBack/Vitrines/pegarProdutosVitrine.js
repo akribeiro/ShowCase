@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const exclusiveCode = urlParams.get('ExclusiveCode');
-    console.log(exclusiveCode);
-
 
     const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Showcase/GetByExclusiveCode/${exclusiveCode}`;
         axios.get(apiUrl)
@@ -162,11 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("Erro na solicitação:", error);
             });
 
-
-
 });
-
-
 
 // Função para criar um elemento de produto
 function createProductCard(produto) {
