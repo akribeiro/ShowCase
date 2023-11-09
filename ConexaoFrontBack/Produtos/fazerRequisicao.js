@@ -82,52 +82,64 @@ document.addEventListener("DOMContentLoaded", function () {
                             link.addEventListener("click", function (event) {
                                 event.preventDefault(); // Impede que o link redirecione imediatamente
 
-                                const checkbox1 = document.getElementById("checkbox1");
-                                const checkbox2 = document.getElementById("checkbox2");
-                                const mostrarValor = checkbox1.checked;
-                                const mostrarImagem = checkbox2.checked;
+                                const showcaseId = localStorage.getItem("showcaseId");
+                                const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
+                                    axios.request(apiUrl)
+                                        .then(async (response) => {
+                                            if (response.status === 200 && response.data.statusCode === 200) {
+                                                const id = response.data.data.id;
+                                                const templateId = vitrines[0].id;
+                                                const backgroundColorCode = response.data.data.backgroundColorCode;
+                                                const showProductValue = response.data.data.showProductValue;
+                                                const showStoreLogo = response.data.data.showStoreLogo;
+                                                const redirectLink = response.data.data.redirectLink;
 
-                                const showcaseStyleId = localStorage.getItem("showcaseStyleId");
-                                const templateId = vitrines[0].id;
-                                const selectedColor = colorPicker.value;
-                                const showProductValue = mostrarValor;
-                                const showStoreLogo = mostrarImagem;
+                                                const postData = {
+                                                    showcaseStyleId: id,
+                                                    templateId: templateId,
+                                                    backgroundColor: backgroundColorCode,
+                                                    showProductValue: Boolean(showProductValue),
+                                                    showStoreLogo: Boolean(showStoreLogo),
+                                                    redirectLink: redirectLink,
+                                                };
+                                            
+                                                let data = JSON.stringify({
+                                                    "showcaseStyleId": postData.showcaseStyleId,
+                                                    "templateId": postData.templateId,
+                                                    "backgroundColorCode": postData.backgroundColor,
+                                                    "showProductValue": postData.showProductValue,
+                                                    "showStoreLogo": postData.showStoreLogo,
+                                                    "redirectLink": postData.redirectLink
+                                                });
+                                            
+                                                let config = {
+                                                    method: 'put',
+                                                    maxBodyLength: Infinity,
+                                                    url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'Authorization': ''
+                                                    },
+                                                    data: data
+                                                };
+                                            
+                                                axios.request(config)
+                                                    .then((response) => {
+                                                        const novaURL = `./CriacaoDaVitrine.html`;
+                                                        window.location.href = novaURL;
+                                                    })
+                                                    .catch((error) => {
+                                                        console.log(error);
+                                                    });
 
-                                const postData = {
-                                    showcaseStyleId: showcaseStyleId,
-                                    templateId: templateId,
-                                    backgroundColor: selectedColor,
-                                    showProductValue: Boolean(showProductValue),
-                                    showStoreLogo: Boolean(showStoreLogo),
-                                };
-
-                                let data = JSON.stringify({
-                                    "showcaseStyleId": postData.showcaseStyleId,
-                                    "templateId": postData.templateId,
-                                    "backgroundColorCode": postData.backgroundColor,
-                                    "showProductValue": postData.showProductValue,
-                                    "showStoreLogo": postData.showStoreLogo
-                                });
-
-                                let config = {
-                                    method: 'put',
-                                    maxBodyLength: Infinity,
-                                    url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': ''
-                                    },
-                                    data: data
-                                };
-
-                                axios.request(config)
-                                    .then((response) => {
-                                        const novaURL = `./CriacaoDaVitrine.html`;
-                                        window.location.href = novaURL;
-                                    })
-                                    .catch((error) => {
-                                        console.log(error);
-                                    });
+                                            }
+                                            else{
+                                                console.log(response.data);
+                                            }
+                                        })
+                                        .catch(function (error) {
+                                            console.log(error);
+                                        });
                             });
                         } else if (contagem === 2) {
                             const link = document.createElement("a");
@@ -140,52 +152,64 @@ document.addEventListener("DOMContentLoaded", function () {
                             link.addEventListener("click", function (event) {
                                 event.preventDefault(); // Impede que o link redirecione imediatamente
 
-                                const checkbox1 = document.getElementById("checkbox1");
-                                const checkbox2 = document.getElementById("checkbox2");
-                                const mostrarValor = checkbox1.checked;
-                                const mostrarImagem = checkbox2.checked;
+                                const showcaseId = localStorage.getItem("showcaseId");
+                                const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
+                                    axios.request(apiUrl)
+                                        .then(async (response) => {
+                                            if (response.status === 200 && response.data.statusCode === 200) {
+                                                const id = response.data.data.id;
+                                                const templateId = vitrines[1].id;
+                                                const backgroundColorCode = response.data.data.backgroundColorCode;
+                                                const showProductValue = response.data.data.showProductValue;
+                                                const showStoreLogo = response.data.data.showStoreLogo;
+                                                const redirectLink = response.data.data.redirectLink;
 
-                                const showcaseStyleId = localStorage.getItem("showcaseStyleId");
-                                const templateId = vitrines[1].id;
-                                const selectedColor = colorPicker.value;
-                                const showProductValue = mostrarValor;
-                                const showStoreLogo = mostrarImagem;
+                                                const postData = {
+                                                    showcaseStyleId: id,
+                                                    templateId: templateId,
+                                                    backgroundColor: backgroundColorCode,
+                                                    showProductValue: Boolean(showProductValue),
+                                                    showStoreLogo: Boolean(showStoreLogo),
+                                                    redirectLink: redirectLink,
+                                                };
+                                            
+                                                let data = JSON.stringify({
+                                                    "showcaseStyleId": postData.showcaseStyleId,
+                                                    "templateId": postData.templateId,
+                                                    "backgroundColorCode": postData.backgroundColor,
+                                                    "showProductValue": postData.showProductValue,
+                                                    "showStoreLogo": postData.showStoreLogo,
+                                                    "redirectLink": postData.redirectLink
+                                                });
+                                            
+                                                let config = {
+                                                    method: 'put',
+                                                    maxBodyLength: Infinity,
+                                                    url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'Authorization': ''
+                                                    },
+                                                    data: data
+                                                };
+                                            
+                                                axios.request(config)
+                                                    .then((response) => {
+                                                        const novaURL = `./CriacaoDaVitrine2.html`;
+                                                        window.location.href = novaURL;
+                                                    })
+                                                    .catch((error) => {
+                                                        console.log(error);
+                                                    });
 
-                                const postData = {
-                                    showcaseStyleId: showcaseStyleId,
-                                    templateId: templateId,
-                                    backgroundColor: selectedColor,
-                                    showProductValue: Boolean(showProductValue),
-                                    showStoreLogo: Boolean(showStoreLogo),
-                                };
-
-                                let data = JSON.stringify({
-                                    "showcaseStyleId": postData.showcaseStyleId,
-                                    "templateId": postData.templateId,
-                                    "backgroundColorCode": postData.backgroundColor,
-                                    "showProductValue": postData.showProductValue,
-                                    "showStoreLogo": postData.showStoreLogo
-                                });
-
-                                let config = {
-                                    method: 'put',
-                                    maxBodyLength: Infinity,
-                                    url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': ''
-                                    },
-                                    data: data
-                                };
-
-                                axios.request(config)
-                                    .then((response) => {
-                                        const novaURL = `./CriacaoDaVitrine2.html`;
-                                        window.location.href = novaURL;
-                                    })
-                                    .catch((error) => {
-                                        console.log(error);
-                                    });
+                                            }
+                                            else{
+                                                console.log(response.data);
+                                            }
+                                        })
+                                        .catch(function (error) {
+                                            console.log(error);
+                                        });
                             });
                         }
                     });
@@ -495,50 +519,129 @@ const sendStyleButton = document.querySelector(".send-styles"); // Selecione o b
 sendStyleButton.addEventListener("click", function () {
     const checkbox1 = document.getElementById("checkbox1");
     const checkbox2 = document.getElementById("checkbox2");
-    const mostrarValor = checkbox1.checked;
-    const mostrarImagem = checkbox2.checked;
+    const backgroundColorCode = colorPicker.value;
+    const showProductValue = checkbox1.checked;
+    const showStoreLogo = checkbox2.checked;
 
-    const showcaseStyleId = localStorage.getItem("showcaseStyleId");
-    const templateId = localStorage.getItem("templateId");
-    const selectedColor = colorPicker.value;
-    const showProductValue = mostrarValor;
-    const showStoreLogo = mostrarImagem;
+    const showcaseId = localStorage.getItem("showcaseId");
+    const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
+        axios.request(apiUrl)
+            .then(async (response) => {
+                const id = response.data.data.id;
+                const templateId = response.data.data.templateId;
+                const checkbox1 = document.getElementById("checkbox1");
+                const checkbox2 = document.getElementById("checkbox2");
+                const backgroundColorCode = colorPicker.value;
+                const showProductValue = checkbox1.checked;
+                const showStoreLogo = checkbox2.checked;
+                const redirectLink = response.data.data.redirectLink;
 
-    const postData = {
-        showcaseStyleId: showcaseStyleId,
-        templateId: templateId,
-        backgroundColor: selectedColor,
-        showProductValue: Boolean(showProductValue),
-        showStoreLogo: Boolean(showStoreLogo),
-    };
-
-    let data = JSON.stringify({
-        "showcaseStyleId": postData.showcaseStyleId,
-        "templateId": postData.templateId,
-        "backgroundColorCode": postData.backgroundColor,
-        "showProductValue": postData.showProductValue,
-        "showStoreLogo": postData.showStoreLogo
-    });
-
-    let config = {
-        method: 'put',
-        maxBodyLength: Infinity,
-        url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': ''
-        },
-        data: data
-    };
-
-    axios.request(config)
-        .then((response) => {
-            console.log(showcaseStyleId);
-            console.log(response);
-            console.log("ESTILO ALTERADO COM SUCESSO!");
-            location.reload();
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+                const postData = {
+                    showcaseStyleId: id,
+                    templateId: templateId,
+                    backgroundColor: backgroundColorCode,
+                    showProductValue: Boolean(showProductValue),
+                    showStoreLogo: Boolean(showStoreLogo),
+                    redirectLink: redirectLink,
+                };
+            
+                let data = JSON.stringify({
+                    "showcaseStyleId": postData.showcaseStyleId,
+                    "templateId": postData.templateId,
+                    "backgroundColorCode": postData.backgroundColor,
+                    "showProductValue": postData.showProductValue,
+                    "showStoreLogo": postData.showStoreLogo,
+                    "redirectLink": postData.redirectLink
+                });
+            
+                let config = {
+                    method: 'put',
+                    maxBodyLength: Infinity,
+                    url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': ''
+                    },
+                    data: data
+                };
+            
+                axios.request(config)
+                    .then((response) => {
+                        console.log("ESTILO ALTERADO COM SUCESSO!");
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 });
+
+
+//Altera Link
+const alterarLink = document.querySelector(".send-link");
+
+alterarLink.addEventListener("click", function(){
+    const showcaseId = localStorage.getItem("showcaseId");
+    const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
+        axios.request(apiUrl)
+            .then(async (response) => {
+                if (response.status === 200 && response.data.statusCode === 200) {
+
+                    const id = response.data.data.id;
+                    const templateId = response.data.data.templateId;
+                    const backgroundColorCode = response.data.data.backgroundColorCode;
+                    const showProductValue = response.data.data.showProductValue;
+                    const showStoreLogo = response.data.data.showStoreLogo;
+                    const novoLink = document.getElementById("linkBotao");
+                    const redirectLink = novoLink.value;
+
+                    const postData = {
+                        showcaseStyleId: id,
+                        templateId: templateId,
+                        backgroundColor: backgroundColorCode,
+                        showProductValue: Boolean(showProductValue),
+                        showStoreLogo: Boolean(showStoreLogo),
+                        redirectLink: redirectLink,
+                    };
+                
+                    let data = JSON.stringify({
+                        "showcaseStyleId": postData.showcaseStyleId,
+                        "templateId": postData.templateId,
+                        "backgroundColorCode": postData.backgroundColor,
+                        "showProductValue": postData.showProductValue,
+                        "showStoreLogo": postData.showStoreLogo,
+                        "redirectLink": postData.redirectLink
+                    });
+                
+                    let config = {
+                        method: 'put',
+                        maxBodyLength: Infinity,
+                        url: 'https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': ''
+                        },
+                        data: data
+                    };
+                
+                    axios.request(config)
+                        .then((response) => {
+                            console.log("LINK ALTERADO COM SUCESSO!");
+                            location.reload();
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+
+                }
+                else{
+                    console.log(response.data);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+})
