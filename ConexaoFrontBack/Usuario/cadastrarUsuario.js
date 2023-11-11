@@ -6,6 +6,15 @@ document.getElementById('formularioCadastro').addEventListener('submit', functio
     const senha = document.getElementById("senha").value;
     const confirmarEmail = document.getElementById("confirmarEmail").value;
     const confirmarSenha = document.getElementById("confirmarSenha").value;
+    const storeLogo = document.getElementById('logo');
+
+    let file = null;
+
+    if (storeLogo.files.length > 0) {
+        // Um arquivo foi selecionado pelo usuário
+        file = storeLogo.files[0];
+    }
+    
 
     if (email !== confirmarEmail) {
         // Os valores são diferentes, exiba uma mensagem de erro
@@ -43,30 +52,29 @@ document.getElementById('formularioCadastro').addEventListener('submit', functio
         axios.request(config)
         .then((response) => {
             if (response.status === 200 && response.data.statusCode === 200) {
-
-                // Crie um objeto com os dados do usuário
+                
                 const storeData = {
                     name: nome,
-                    storeLogo: null,
+                    storeLogo: file,
                     userId: response.data.data.id
                 };
 
-                let dataStore = JSON.stringify({
-                    "name": storeData.name,
-                    "storeLogo": storeData.storeLogo,
-                    "userId": storeData.userId
-                });
+                // Crie um objeto FormData para o cadastro da loja
+                const storeFormData = new FormData();
+                storeFormData.append('name', storeData.name);
+                storeFormData.append('storeLogo', storeData.storeLogo);
+                storeFormData.append('userId', storeData.userId);
 
                 let configStore = {
                     method: 'post',
-                    maxBodyLength: Infinity,
                     url: 'https://showcase-api.azurewebsites.net/api/v1/Store',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': ''
                     },
-                    data: dataStore
+                    data: storeFormData
                 };
+
 
                 axios.request(configStore)
                 .then((response) => {
@@ -78,6 +86,9 @@ document.getElementById('formularioCadastro').addEventListener('submit', functio
                         console.log("Erro no registro: " + response.data);
                     }
                 })
+                .catch((error) => {
+                    console.log(error);
+                });
 
             } else {
                 // Exiba uma mensagem de erro ou trate de outra forma

@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("userId");
+    const showcaseId = localStorage.getItem("showcaseId");
+    console.log(showcaseId);
     //carrrega lista de produtos
     if (userId) {
         const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
@@ -352,6 +354,8 @@ function createProductCard(produto) {
                 const backgroundColor = "#F0A732";
                 localStorage.setItem("backgroundColor", backgroundColor);
             }
+            const redirectLink = response.data.data.redirectLink;
+            localStorage.setItem("redirectLink", redirectLink);
         });
     const productCard = document.createElement("div");
     productCard.className = "card mb-2 bg-dark";
@@ -361,6 +365,7 @@ function createProductCard(produto) {
     const backgroundColor = localStorage.getItem("backgroundColor");
     const showProductValue = localStorage.getItem("showProductValue");
     const showStoreLogo = localStorage.getItem("showStoreLogo");
+    const redirectLink = localStorage.getItem("redirectLink");
 
     const cor = `color: ${backgroundColor}; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to left, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px; border-top-right-radius: 80px; border-bottom-right-radius: 200px;`;
     productCard.style = cor;
@@ -380,7 +385,7 @@ function createProductCard(produto) {
                         <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
                     </div>
                     <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                         <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                     </div>
                 </div>
@@ -400,7 +405,7 @@ function createProductCard(produto) {
                         <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
                     </div>
                     <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                         <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                     </div>
                 </div>
@@ -419,7 +424,7 @@ function createProductCard(produto) {
                         <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
                     </div>
                     <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                         <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                     </div>
                 </div>
@@ -437,7 +442,7 @@ function createProductCard(produto) {
                         <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
                     </div>
                     <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                         <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                     </div>
                 </div>

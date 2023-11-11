@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("userId");
-    const showcaseStyleId = localStorage.getItem("showcaseStyleId");
-    const showcaseId = localStorage.getItem("showcaseId");
+
     // Verifica se há um userId válido
     //carrega listagem de produtos
     if (userId) {
@@ -356,6 +355,8 @@ function createProductCard(produto) {
             const backgroundColor = "#1af5b6";
             localStorage.setItem("backgroundColor", backgroundColor);
         }
+        const redirectLink = response.data.data.redirectLink;
+        localStorage.setItem("redirectLink", redirectLink);
     });
     const customProductCard = document.createElement("div");
     customProductCard.className = "col-md-4 mb-2";
@@ -365,6 +366,7 @@ function createProductCard(produto) {
     const backgroundColor = localStorage.getItem("backgroundColor");
     const showProductValue = localStorage.getItem("showProductValue");
     const showStoreLogo = localStorage.getItem("showStoreLogo");
+    const redirectLink = localStorage.getItem("redirectLink");
 
     if(showProductValue === "true" && showStoreLogo === "true"){
         // Defina o conteúdo do cartão do produto com base nos dados do produto
@@ -379,7 +381,7 @@ function createProductCard(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                 </div>
             </div>
@@ -398,7 +400,7 @@ function createProductCard(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                 </div>
             </div>
@@ -415,7 +417,7 @@ function createProductCard(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                 </div>
             </div>
@@ -431,7 +433,7 @@ function createProductCard(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                 </div>
             </div>

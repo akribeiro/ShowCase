@@ -34,9 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
                             console.log("Erro na solicitação:", error);
                         });
 
-
-
-
                         const searchUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
                         axios.get(searchUrl)
                             .then(function (response) {
@@ -68,6 +65,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                 }
                                 
                                 const templateName = response.data.data.templateName;
+                                const redirectLink = response.data.data.redirectLink;
+                                localStorage.setItem("redirectLink", redirectLink);
 
                                 if(templateName === "Listagem na Vertical"){
                                     const apiUrl2 = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseProduct/GetProductsByShowcaseId/${showcaseId}`;
@@ -172,6 +171,7 @@ function createProductCard(produto) {
     const backgroundColor = localStorage.getItem("backgroundColor");
     const showProductValue = localStorage.getItem("showProductValue");
     const showStoreLogo = localStorage.getItem("showStoreLogo");
+    const redirectLink = localStorage.getItem("redirectLink");
 
     const cor = `color: ${backgroundColor}; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to left, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px; border-top-right-radius: 80px; border-bottom-right-radius: 200px;`;
     productCard.style = cor;
@@ -191,7 +191,7 @@ function createProductCard(produto) {
                         <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
                     </div>
                     <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     </div>
                 </div>
             </div>
@@ -210,7 +210,7 @@ function createProductCard(produto) {
                         <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
                     </div>
                     <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     </div>
                 </div>
             </div>
@@ -228,7 +228,7 @@ function createProductCard(produto) {
                         <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
                     </div>
                     <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     </div>
                 </div>
             </div>
@@ -245,7 +245,7 @@ function createProductCard(produto) {
                         <h5 class="card-text" style="color: white;">Descrição: ${produto.sku}</h5>
                     </div>
                     <div class="card-footer d-flex mt-3 justify-content-start" style="color: white; border: none; background: none;">
-                        <a href="#" class="btn btn-primary">Quero Este!</a>
+                        <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     </div>
                 </div>
             </div>
@@ -266,6 +266,7 @@ function createProductCard2(produto) {
     const backgroundColor = localStorage.getItem("backgroundColor");
     const showProductValue = localStorage.getItem("showProductValue");
     const showStoreLogo = localStorage.getItem("showStoreLogo");
+    const redirectLink = localStorage.getItem("redirectLink");
 
     if(showProductValue === "true" && showStoreLogo === "true"){
         // Defina o conteúdo do cartão do produto com base nos dados do produto
@@ -280,7 +281,7 @@ function createProductCard2(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                 </div>
             </div>
         `;
@@ -298,7 +299,7 @@ function createProductCard2(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                 </div>
             </div>
         `;
@@ -314,7 +315,7 @@ function createProductCard2(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                 </div>
             </div>
         `;
@@ -329,7 +330,7 @@ function createProductCard2(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                 </div>
             </div>
         `;
