@@ -61,15 +61,15 @@ document.getElementById('formularioCadastro').addEventListener('submit', functio
 
                 // Crie um objeto FormData para o cadastro da loja
                 const storeFormData = new FormData();
-                storeFormData.append('name', storeData.name);
-                storeFormData.append('storeLogo', storeData.storeLogo);
-                storeFormData.append('userId', storeData.userId);
+                storeFormData.append('Name', storeData.name);
+                storeFormData.append('StoreLogo', storeData.storeLogo);
+                storeFormData.append('UserId', storeData.userId);
 
                 let configStore = {
                     method: 'post',
                     url: 'https://showcase-api.azurewebsites.net/api/v1/Store',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'multipart/form-data',
                         'Authorization': ''
                     },
                     data: storeFormData
