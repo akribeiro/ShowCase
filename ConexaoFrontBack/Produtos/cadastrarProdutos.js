@@ -12,7 +12,6 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                 if (response.status === 200 && response.data.statusCode === 200){
                     // Pegar aqui o storeId para criar uma nova vitrine
                     const storeId = response.data.data[0].id;
-
                     const produto = document.getElementById('produto').value;
                     const valor = document.getElementById('valor').value;
                     const descricao = document.getElementById('descricao').value;
@@ -28,16 +27,16 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                     }
 
                     const postData = {
-                        storeId: storeId,
-                        name: produto,
-                        value: parseFloat(valor),
-                        sku: sku,
-                        description: descricao,
+                        ProductId: productId,
+                        name: novoNome,
+                        value: parseFloat(novoValor),
+                        sku: novoSku,
+                        description: novaDescricao,
                         productPicture: file
                     };
-    
+
                     const storeFormData = new FormData();
-                    storeFormData.append('StoreId', postData.storeId);
+                    storeFormData.append('ProductId', postData.ProductId);
                     storeFormData.append('Name', postData.name);
                     storeFormData.append('Value', postData.value);
                     storeFormData.append('SKU', postData.sku);
@@ -45,9 +44,11 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                     storeFormData.append('ProductPicture', file);
 
                     let config = {
-                        method: 'post',
-                        url: 'https://showcase-api.azurewebsites.net/api/v1/Store',
+                        method: 'put', 
+                        maxBodyLength: Infinity,
+                        url: 'https://showcase-api.azurewebsites.net/api/v1/StoreProduct/CreateProduct',
                         headers: {
+                            'Content-Type': 'multipart/form-data',
                             'Authorization': ''
                         },
                         data: storeFormData
