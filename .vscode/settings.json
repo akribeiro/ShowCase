@@ -1,3 +1,5 @@
 {
-    "liveServer.settings.multiRootWorkspaceName": "ShowCase"
+    "liveServer.settings.multiRootWorkspaceName": "ShowCase",
+    "appService.defaultWebAppToDeploy": "/subscriptions/c713ea29-607d-48d4-8258-e4f48f755ce6/resourceGroups/showCaseDB/providers/Microsoft.Web/sites/showcaseFront",
+    "appService.deploySubpath": "."
 }
