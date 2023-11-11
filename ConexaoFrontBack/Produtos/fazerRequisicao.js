@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("userId");
-    const showcaseId = localStorage.getItem("showcaseId");
-    console.log(showcaseId);
     //carrrega lista de produtos
     if (userId) {
         const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Store/GetAllStoresByUserId/${userId}`;
@@ -64,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
     } else {
-        console.log("UserId não encontrado na URL.");
+        console.log("UserId não encontrado");
     }
 
     //cria botões de modelos da vitrine
@@ -228,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
     } else {
-        console.log("UserId não encontrado na URL.");
+        console.log("UserId não encontrado");
     }
 
     //Carregar produtos da vitrine
@@ -276,7 +274,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     else {
-        console.log("UserId não encontrado na URL.");
+        console.log("UserId não encontrado");
+    }
+
+    //Carrega link da vitrine
+    if(userId){
+        const showcaseId = localStorage.getItem("showcaseId");
+        const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Showcase/GetById/${showcaseId}`;
+        axios.request(apiUrl)
+            .then(async (response) => {
+                if (response.status === 200 && response.data.statusCode === 200) {
+                    const uniqueLink = response.data.data.uniqueLink;
+                    const lojaTronicElements = document.querySelector('.d-flex.justify-content-center.mb-2');
+                    lojaTronicElements.textContent = `Link da sua vitrine para divulgação: ${uniqueLink}`
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+    else{
+        console.log("UserId não encontrado")
     }
 });
 
