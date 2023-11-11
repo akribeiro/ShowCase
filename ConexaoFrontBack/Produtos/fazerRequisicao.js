@@ -12,12 +12,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.status === 200 && response.data.statusCode === 200) {
                     const storeId = response.data.data[0].id;
                     const storeName = response.data.data[0].name;
+                    const storeImageURL = response.data.data[0].storeLogo;
+                    const lojaTronicElements = document.querySelector('.col-md-4.d-flex.flex-column.justify-content-center');
 
-                    const lojaTronicElement = document.querySelector('.d-flex.justify-content-center.mb-0.mt-3');
+                    const imagemElement = document.createElement("img");
+                    imagemElement.src = storeImageURL; // Defina o link da imagem
+                    imagemElement.className = "img-fluid";
+                    imagemElement.alt = "Logo Loja";
+                    lojaTronicElements.appendChild(imagemElement);
 
-                    if (lojaTronicElement) {
-                        lojaTronicElement.textContent = storeName;
-                    }
+                    const h3Element = document.createElement("h3");
+                    h3Element.className = "d-flex justify-content-center mb-0 mt-3";
+                    h3Element.textContent = storeName;
+                    lojaTronicElements.appendChild(h3Element);
 
                     const searchUrl = `https://showcase-api.azurewebsites.net/api/v1/StoreProduct/GetAllProductsByStoreId/${storeId}`;
 
@@ -369,9 +376,6 @@ function createProductCard(produto) {
 
     const cor = `color: ${backgroundColor}; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to left, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px; border-top-right-radius: 80px; border-bottom-right-radius: 200px;`;
     productCard.style = cor;
-
-    console.log(produto);
-
 
     if (showProductValue === "true" && showStoreLogo === "true") {
         // Defina o conteúdo do cartão do produto com base nos dados do produto
