@@ -14,17 +14,20 @@ document.addEventListener("DOMContentLoaded", function () {
                     axios.get(apiUrl)
                         .then(function (response) {
                             if (response.status === 200 && response.data.statusCode === 200){
-                                const nome = response.data.data.name;
-                                const imagemLoja = response.data.data.storeLogo;
+                                const storeName = response.data.data.name;
+                                const storeImageURL = response.data.data.storeLogo;
+                                const lojaTronicElements = document.querySelector('.col-md-4.d-flex.flex-column.justify-content-center');
+                                console.log("TESTE");
+                                const imagemElement = document.createElement("img");
+                                imagemElement.src = storeImageURL; // Defina o link da imagem
+                                imagemElement.className = "img-fluid";
+                                imagemElement.alt = "Logo Loja";
+                                lojaTronicElements.appendChild(imagemElement);
 
-                                const lojaTronicElement = document.querySelector('.d-flex.justify-content-center.mb-0.mt-3');
-
-                                if (lojaTronicElement) {
-                                    lojaTronicElement.textContent = nome;
-                                }
-                                else{
-                                    console.log("Erro ao colocar nome da loja!");
-                                }
+                                const h3Element = document.createElement("h3");
+                                h3Element.className = "d-flex justify-content-center mb-0 mt-3";
+                                h3Element.textContent = storeName;
+                                lojaTronicElements.appendChild(h3Element);
                             }
                             else {
                                 console.log("Erro:", response.data);

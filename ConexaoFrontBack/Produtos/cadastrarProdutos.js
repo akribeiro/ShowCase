@@ -12,10 +12,10 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                 if (response.status === 200 && response.data.statusCode === 200){
                     // Pegar aqui o storeId para criar uma nova vitrine
                     const storeId = response.data.data[0].id;
-                    const produto = document.getElementById('produto').value;
-                    const valor = document.getElementById('valor').value;
-                    const descricao = document.getElementById('descricao').value;
-                    const sku = document.getElementById('sku').value;
+                    const novoNome = document.getElementById('produto').value;
+                    const novoValor = document.getElementById('valor').value;
+                    const novaDescricao = document.getElementById('descricao').value;
+                    const novoSku = document.getElementById('sku').value;
 
                     const imagemProduto = document.getElementById('imagemProduto');
 
@@ -27,7 +27,7 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                     }
 
                     const postData = {
-                        ProductId: productId,
+                        storeId: storeId,
                         name: novoNome,
                         value: parseFloat(novoValor),
                         sku: novoSku,
@@ -36,7 +36,7 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                     };
 
                     const storeFormData = new FormData();
-                    storeFormData.append('ProductId', postData.ProductId);
+                    storeFormData.append('StoreId', postData.storeId);
                     storeFormData.append('Name', postData.name);
                     storeFormData.append('Value', postData.value);
                     storeFormData.append('SKU', postData.sku);
@@ -44,7 +44,7 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                     storeFormData.append('ProductPicture', file);
 
                     let config = {
-                        method: 'put', 
+                        method: 'post', 
                         maxBodyLength: Infinity,
                         url: 'https://showcase-api.azurewebsites.net/api/v1/StoreProduct/CreateProduct',
                         headers: {
