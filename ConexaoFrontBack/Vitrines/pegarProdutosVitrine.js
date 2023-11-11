@@ -182,7 +182,7 @@ function createProductCard(produto) {
         productCard.innerHTML = `
             <div class="row g-0 p-3">
                 <div class="col-md-3 p-2">
-                    <img src="${produto.imageUrl}" class="card-img-top img-fluid" alt="${produto.name}">
+                    <img src="${produto.urlProductPicture}" class="card-img-top img-fluid" alt="${produto.name}">
                 </div>
                 <div class="col-md-8 pt-0 ps-3 mt-3">
                     <div class="card-body py-0">
@@ -202,7 +202,7 @@ function createProductCard(produto) {
         productCard.innerHTML = `
             <div class="row g-0 p-3">
                 <div class="col-md-3 p-2">
-                    <img src="${produto.imageUrl}" class="card-img-top img-fluid" alt="${produto.name}">
+                    <img src="${produto.urlProductPicture}" class="card-img-top img-fluid" alt="${produto.name}">
                 </div>
                 <div class="col-md-8 pt-0 ps-3 mt-3">
                     <div class="card-body py-0">
@@ -273,7 +273,7 @@ function createProductCard2(produto) {
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
                 <div class="d-flex justify-content-center">
-                    <img src="${produto.imageUrl}" width="150px" class="my-2">
+                    <img src="${produto.urlProductPicture}" width="150px" class="my-2">
                 </div>
                 <div class="d-flex flex-column">
                     <h1>${produto.name}</h1>
@@ -292,7 +292,7 @@ function createProductCard2(produto) {
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
                 <div class="d-flex justify-content-center">
-                    <img src="${produto.imageUrl}" width="150px" class="my-2">
+                    <img src="${produto.urlProductPicture}" width="150px" class="my-2">
                 </div>
                 <div class="d-flex flex-column">
                     <h1>${produto.name}</h1>

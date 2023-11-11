@@ -373,7 +373,7 @@ function createProductCard(produto) {
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
                 <div class="d-flex justify-content-center">
-                    <img src="${produto.imageUrl}" width="150px" class="my-2">
+                    <img src="${produto.urlProductPicture}" width="150px" class="my-2">
                 </div>
                 <div class="d-flex flex-column">
                     <h1>${produto.name}</h1>
@@ -393,7 +393,7 @@ function createProductCard(produto) {
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
                 <div class="d-flex justify-content-center">
-                    <img src="${produto.imageUrl}" width="150px" class="my-2">
+                    <img src="${produto.urlProductPicture}" width="150px" class="my-2">
                 </div>
                 <div class="d-flex flex-column">
                     <h1>${produto.name}</h1>
@@ -514,9 +514,6 @@ const sendStyleButton = document.querySelector(".send-styles"); // Selecione o b
 sendStyleButton.addEventListener("click", function () {
     const checkbox1 = document.getElementById("checkbox1");
     const checkbox2 = document.getElementById("checkbox2");
-    const backgroundColorCode = colorPicker.value;
-    const showProductValue = checkbox1.checked;
-    const showStoreLogo = checkbox2.checked;
 
     const showcaseId = localStorage.getItem("showcaseId");
     const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
@@ -529,7 +526,11 @@ sendStyleButton.addEventListener("click", function () {
                 const backgroundColorCode = colorPicker.value;
                 const showProductValue = checkbox1.checked;
                 const showStoreLogo = checkbox2.checked;
-                const redirectLink = response.data.data.redirectLink;
+                let redirectLink = response.data.data.redirectLink;
+
+                if(response.data.data.redirectLink === null){
+                    redirectLink = "";
+                }
 
                 const postData = {
                     showcaseStyleId: id,
@@ -591,7 +592,11 @@ alterarLink.addEventListener("click", function(){
                     const showProductValue = response.data.data.showProductValue;
                     const showStoreLogo = response.data.data.showStoreLogo;
                     const novoLink = document.getElementById("linkBotao");
-                    const redirectLink = novoLink.value;
+                    let redirectLink = novoLink.value;
+
+                    if(response.data.data.redirectLink === null){
+                        redirectLink = "";
+                    }
 
                     const postData = {
                         showcaseStyleId: id,
@@ -610,6 +615,7 @@ alterarLink.addEventListener("click", function(){
                         "showStoreLogo": postData.showStoreLogo,
                         "redirectLink": postData.redirectLink
                     });
+
                 
                     let config = {
                         method: 'put',

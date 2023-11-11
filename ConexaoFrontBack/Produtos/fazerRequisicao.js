@@ -370,13 +370,15 @@ function createProductCard(produto) {
     const cor = `color: ${backgroundColor}; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to left, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px; border-top-right-radius: 80px; border-bottom-right-radius: 200px;`;
     productCard.style = cor;
 
+    console.log(produto);
+
 
     if (showProductValue === "true" && showStoreLogo === "true") {
         // Defina o conteúdo do cartão do produto com base nos dados do produto
         productCard.innerHTML = `
             <div class="row g-0 p-3">
                 <div class="col-md-3 p-2">
-                    <img src="${produto.imageUrl}" class="card-img-top img-fluid" alt="${produto.name}">
+                    <img src="${produto.urlProductPicture}" class="card-img-top img-fluid" alt="${produto.name}">
                 </div>
                 <div class="col-md-8 pt-0 ps-3 mt-3">
                     <div class="card-body py-0">
@@ -397,7 +399,7 @@ function createProductCard(produto) {
         productCard.innerHTML = `
             <div class="row g-0 p-3">
                 <div class="col-md-3 p-2">
-                    <img src="${produto.imageUrl}" class="card-img-top img-fluid" alt="${produto.name}">
+                    <img src="${produto.urlProductPicture}" class="card-img-top img-fluid" alt="${produto.name}">
                 </div>
                 <div class="col-md-8 pt-0 ps-3 mt-3">
                     <div class="card-body py-0">
@@ -524,9 +526,6 @@ const sendStyleButton = document.querySelector(".send-styles"); // Selecione o b
 sendStyleButton.addEventListener("click", function () {
     const checkbox1 = document.getElementById("checkbox1");
     const checkbox2 = document.getElementById("checkbox2");
-    const backgroundColorCode = colorPicker.value;
-    const showProductValue = checkbox1.checked;
-    const showStoreLogo = checkbox2.checked;
 
     const showcaseId = localStorage.getItem("showcaseId");
     const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
@@ -539,7 +538,11 @@ sendStyleButton.addEventListener("click", function () {
                 const backgroundColorCode = colorPicker.value;
                 const showProductValue = checkbox1.checked;
                 const showStoreLogo = checkbox2.checked;
-                const redirectLink = response.data.data.redirectLink;
+                let redirectLink = response.data.data.redirectLink;
+
+                if(response.data.data.redirectLink === null){
+                    redirectLink = "";
+                }
 
                 const postData = {
                     showcaseStyleId: id,
@@ -601,7 +604,11 @@ alterarLink.addEventListener("click", function(){
                     const showProductValue = response.data.data.showProductValue;
                     const showStoreLogo = response.data.data.showStoreLogo;
                     const novoLink = document.getElementById("linkBotao");
-                    const redirectLink = novoLink.value;
+                    let redirectLink = novoLink.value;
+
+                    if(response.data.data.redirectLink === null){
+                        redirectLink = "";
+                    }
 
                     const postData = {
                         showcaseStyleId: id,

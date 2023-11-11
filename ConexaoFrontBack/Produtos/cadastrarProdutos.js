@@ -1,5 +1,3 @@
-const FormData = require('form-data');
-
 document.getElementById('formularioProduto').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -35,7 +33,7 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                         value: parseFloat(valor),
                         sku: sku,
                         description: descricao,
-                        productPicture: imagemProduto
+                        productPicture: file
                     };
     
                     const storeFormData = new FormData();
@@ -45,12 +43,11 @@ document.getElementById('formularioProduto').addEventListener('submit', function
                     storeFormData.append('SKU', postData.sku);
                     storeFormData.append('Description', postData.description);
                     storeFormData.append('ProductPicture', file);
-    
+
                     let config = {
                         method: 'post',
                         url: 'https://showcase-api.azurewebsites.net/api/v1/Store',
                         headers: {
-                            'Content-Type': 'multipart/form-data',
                             'Authorization': ''
                         },
                         data: storeFormData
