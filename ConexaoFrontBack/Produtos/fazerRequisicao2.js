@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             // PEGAR AQUI O storeId para criar uma nova vitrine
                             const storeId = response.data.data[0].id;
                             const storeName = response.data.data[0].name;
-                            const storeImageURL = response.data.data[0].storeLogo;
+                            const storeImageURL = response.data.data[0].urlStoreLogo;
                             const lojaTronicElements = document.querySelector('.col-md-4.d-flex.flex-column.justify-content-center');
                             console.log(lojaTronicElements);
 

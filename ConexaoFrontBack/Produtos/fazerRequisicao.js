@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.status === 200 && response.data.statusCode === 200) {
                     const storeId = response.data.data[0].id;
                     const storeName = response.data.data[0].name;
-                    const storeImageURL = response.data.data[0].storeLogo;
+                    const storeImageURL = response.data.data[0].urlStoreLogo;
+                    console.log(response.data.data);
                     const lojaTronicElements = document.querySelector('.col-md-4.d-flex.flex-column.justify-content-center');
 
                     const imagemElement = document.createElement("img");
