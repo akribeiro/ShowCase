@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("userId");
-    const showcaseStyleId = localStorage.getItem("showcaseStyleId");
-    const showcaseId = localStorage.getItem("showcaseId");
+
     // Verifica se há um userId válido
     //carrega listagem de produtos
     if (userId) {
@@ -14,12 +13,20 @@ document.addEventListener("DOMContentLoaded", function () {
                             // PEGAR AQUI O storeId para criar uma nova vitrine
                             const storeId = response.data.data[0].id;
                             const storeName = response.data.data[0].name;
+                            const storeImageURL = response.data.data[0].urlStoreLogo;
+                            const lojaTronicElements = document.querySelector('.col-md-4.d-flex.flex-column.justify-content-center');
+                            console.log(lojaTronicElements);
 
-                            const lojaTronicElement = document.querySelector('.d-flex.justify-content-center.mb-0.mt-3');
+                            const imagemElement = document.createElement("img");
+                            imagemElement.src = storeImageURL; // Defina o link da imagem
+                            imagemElement.className = "img-fluid";
+                            imagemElement.alt = "Logo Loja";
+                            lojaTronicElements.appendChild(imagemElement);
 
-                            if (lojaTronicElement) {
-                                lojaTronicElement.textContent = storeName;
-                            }
+                            const h3Element = document.createElement("h3");
+                            h3Element.className = "d-flex justify-content-center mb-0 mt-3";
+                            h3Element.textContent = storeName;
+                            lojaTronicElements.appendChild(h3Element);
 
                             const searchUrl = `https://showcase-api.azurewebsites.net/api/v1/StoreProduct/GetAllProductsByStoreId/${storeId}`;
 
@@ -273,6 +280,26 @@ document.addEventListener("DOMContentLoaded", function () {
     else {
         console.log("UserId não encontrado na URL.");
     }
+
+    //Carrega link da vitrine
+    if(userId){
+        const showcaseId = localStorage.getItem("showcaseId");
+        const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/Showcase/GetById/${showcaseId}`;
+        axios.request(apiUrl)
+            .then(async (response) => {
+                if (response.status === 200 && response.data.statusCode === 200) {
+                    const uniqueLink = response.data.data.uniqueLink;
+                    const lojaTronicElements = document.querySelector('.d-flex.justify-content-center.mb-2');
+                    lojaTronicElements.textContent = `Link da sua vitrine para divulgação: ${uniqueLink}`
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+    else{
+        console.log("UserId não encontrado")
+    }
 });
 
 //Adicionar produto na vitrine
@@ -356,6 +383,8 @@ function createProductCard(produto) {
             const backgroundColor = "#1af5b6";
             localStorage.setItem("backgroundColor", backgroundColor);
         }
+        const redirectLink = response.data.data.redirectLink;
+        localStorage.setItem("redirectLink", redirectLink);
     });
     const customProductCard = document.createElement("div");
     customProductCard.className = "col-md-4 mb-2";
@@ -365,13 +394,14 @@ function createProductCard(produto) {
     const backgroundColor = localStorage.getItem("backgroundColor");
     const showProductValue = localStorage.getItem("showProductValue");
     const showStoreLogo = localStorage.getItem("showStoreLogo");
+    const redirectLink = localStorage.getItem("redirectLink");
 
     if(showProductValue === "true" && showStoreLogo === "true"){
         // Defina o conteúdo do cartão do produto com base nos dados do produto
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
                 <div class="d-flex justify-content-center">
-                    <img src="${produto.imageUrl}" width="150px" class="my-2">
+                    <img src="${produto.urlProductPicture}" width="150px" class="my-2">
                 </div>
                 <div class="d-flex flex-column">
                     <h1>${produto.name}</h1>
@@ -379,7 +409,7 @@ function createProductCard(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                 </div>
             </div>
@@ -391,14 +421,14 @@ function createProductCard(produto) {
         customProductCard.innerHTML = `
             <div class="text-decoration-none border mx-1 w-100 p-3" style="color: white; background: url('../Imagens/backgroundTexture.png') repeat, linear-gradient(to top, ${backgroundColor}, black);background-blend-mode: overlay; border-radius: 40px;">
                 <div class="d-flex justify-content-center">
-                    <img src="${produto.imageUrl}" width="150px" class="my-2">
+                    <img src="${produto.urlProductPicture}" width="150px" class="my-2">
                 </div>
                 <div class="d-flex flex-column">
                     <h1>${produto.name}</h1>
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                 </div>
             </div>
@@ -415,7 +445,7 @@ function createProductCard(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                 </div>
             </div>
@@ -431,7 +461,7 @@ function createProductCard(produto) {
                     <h6>Descrição: ${produto.sku}</h6>
                 </div>
                 <div class="mt-3 d-flex justify-content-center" style="color: white; border: none; background: none;">
-                    <a href="#" class="btn btn-primary">Quero Este!</a>
+                    <a href="${redirectLink}" class="btn btn-primary">Quero Este!</a>
                     <button class="btn btn-danger ms-5 btn-excluir" data-produto-id="${produto.id}">Excluir</button>
                 </div>
             </div>
@@ -512,9 +542,6 @@ const sendStyleButton = document.querySelector(".send-styles"); // Selecione o b
 sendStyleButton.addEventListener("click", function () {
     const checkbox1 = document.getElementById("checkbox1");
     const checkbox2 = document.getElementById("checkbox2");
-    const backgroundColorCode = colorPicker.value;
-    const showProductValue = checkbox1.checked;
-    const showStoreLogo = checkbox2.checked;
 
     const showcaseId = localStorage.getItem("showcaseId");
     const apiUrl = `https://showcase-api.azurewebsites.net/api/v1/ShowcaseStyle/GetStyleByShowcaseId/${showcaseId}`;
@@ -527,7 +554,11 @@ sendStyleButton.addEventListener("click", function () {
                 const backgroundColorCode = colorPicker.value;
                 const showProductValue = checkbox1.checked;
                 const showStoreLogo = checkbox2.checked;
-                const redirectLink = response.data.data.redirectLink;
+                let redirectLink = response.data.data.redirectLink;
+
+                if(response.data.data.redirectLink === null){
+                    redirectLink = "";
+                }
 
                 const postData = {
                     showcaseStyleId: id,
@@ -589,7 +620,11 @@ alterarLink.addEventListener("click", function(){
                     const showProductValue = response.data.data.showProductValue;
                     const showStoreLogo = response.data.data.showStoreLogo;
                     const novoLink = document.getElementById("linkBotao");
-                    const redirectLink = novoLink.value;
+                    let redirectLink = novoLink.value;
+
+                    if(response.data.data.redirectLink === null){
+                        redirectLink = "";
+                    }
 
                     const postData = {
                         showcaseStyleId: id,
@@ -608,6 +643,7 @@ alterarLink.addEventListener("click", function(){
                         "showStoreLogo": postData.showStoreLogo,
                         "redirectLink": postData.redirectLink
                     });
+
                 
                     let config = {
                         method: 'put',
